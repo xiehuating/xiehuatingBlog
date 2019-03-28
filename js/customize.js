@@ -32,6 +32,10 @@ window.onload = function() {
 	var projectCaption = document.getElementById( "project-caption" );
 
 	document.addEventListener("scroll", function(event){
+		if ( !projectCaption ) {
+			return false;
+		}
+		
 		var style = projectCaption.className;
 
 		if ( document.documentElement.scrollTop > 90 && style.indexOf( " project-h1-shrink" ) < 0 ) {

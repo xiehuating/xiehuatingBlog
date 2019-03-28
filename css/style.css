@@ -137,11 +137,11 @@ body {
 *
 *
 */
-footer {
+.footer {
     position: relative;
     /*border-top: 1px solid rgb(0,0,0,0.1);*/
     -webkit-box-shadow: 0 2px 2px 2px rgba(0,0,0,0.15);
-    box-shadow: 2px 2px 2px 2px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 2px 2px rgba(0,0,0,0.15);
     padding: 100px 0px;
 }
 
@@ -198,7 +198,7 @@ footer.footer a.link{
 /*
 *
 *
-*	project caption
+*	project page caption
 *
 *
 */
@@ -356,6 +356,7 @@ footer.footer a.link{
 #project .project-title h3 {
 	font-size: 1.75rem;
 	font-weight: 400;
+	color: rgba(255, 255, 255, 0.84);
 }
 
 #project .project-title p {
@@ -441,14 +442,226 @@ footer.footer a.link{
 }
 }
 
+/*
+*
+*
+*	project detail page caption
+*
+*
+*/
+.project-detail-h1 {
+	background-color: #ffffff;
+	width: 100%;
+	position: absolute;
+    top: 10rem;
+    right: 0;
+    left: 0;
+    z-index: 999;
+
+    transition: all 0.3s ease-out;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+}
+
+.project-detail-h1 p:last-of-type{
+	margin-left: 1rem;
+	opacity: 0;
+	display: inline-block;
+/*	transition-delay: 1s;
+	transition: all 0.2s ease-out;
+	-webkit-transition: all 0.2s ease-out;
+	-moz-transition: all 0.2s ease-out;*/
+}
+
+.project-detail-h1 h1 {
+	font-size: 2.5rem;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.84);
+}
+
+.project-detail-h1 p {
+	font-size: 1rem;
+	font-weight: 500;
+	color: rgba(0, 0, 0, 0.28);
+	display: inline-block;
+
+}
+
+@media (max-width: 575.98px) {
+	.project-detail-h1 {
+	    position: fixed;
+	    top: 3.5rem;
+	    z-index: 1029;
+
+	    transition: all 0.3s ease-out;
+		-webkit-transition: all 0.3s ease-out;
+		-moz-transition: all 0.3s ease-out;
+	}
+
+		.project-detail-h1 h1{
+			display: inline-block;
+			margin: 0.75rem 0 1.25rem;
+		}
+		.project-detail-h1 p:last-of-type{
+			display: inline-block;
+			opacity: 1;
+			transition: all 0.2s ease-out;
+			-webkit-transition: all 0.2s ease-out;
+			-moz-transition: all 0.2s ease-out;
+		}
+
+		.project-detail-h1 p:first-of-type{
+		display: none;
+	}
+
+}
+
+
 
 /*
 *
 *
-*	project page
+*	project detail page Typograph, header, image, table, list
 *
 *
 */
+.project-item {
+
+}
+
+.project-item-banner {
+	margin: 2rem 0;
+}
+
+.project-item h1, .project-item h2, .project-item h3, .project-item h4 {
+	color: rgba(0, 0, 0, 0.84);
+	font-weight: 400;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+}
+
+.project-item-paragraph {
+	color: rgba(0, 0, 0, 0.84);
+	font-weight: 400;
+    letter-spacing: 0.01em;
+    margin-bottom: 1.8em;
+    line-height: 1.7;
+    text-align: left;
+}
+
+.project-item-image, .two-image-col {
+	margin: 4rem 0;
+}
+
+.two-image-col div {
+	margin: 0;
+	padding: 0;
+}
+
+.two-image-col div:first-of-type {
+	padding-right: 0.75rem;
+}
+
+.two-image-col div:last-of-type {
+	padding-left: 0.75rem;
+}
+
+@media (max-width: 991.98px) {
+	.two-image-col div:first-of-type {
+		padding-right: 0rem;
+		margin-bottom: 4rem;
+	}
+
+	.two-image-col div:last-of-type {
+		padding-left: 0rem;
+	}
+}
+
+.project-item-image-caption {
+	font-size: 1rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.28);
+    margin-top: 0.75rem;
+}
+
+
+.project-item-table {
+	margin: 4rem 0;
+
+}
+
+.project-item-table th {
+	/*规定非中日韩文本的换行规则。*/
+	word-break: keep-all;
+	/*规定段落中的文本不进行换行*/
+	white-space: nowrap;
+}
+
+.project-item-table .table {
+	margin-bottom: 0;
+}
+
+.project-item-table .table caption {
+	caption-side: top;
+}
+
+.project-item-ul {
+    line-height: 2;
+    list-style: disc inside;
+    margin: 0 1rem 1rem 2rem;
+}
+
+.project-item-ol {
+    line-height: 2;
+    list-style: upper-roman inside;
+    margin: 0 1rem 1rem 2rem;
+}
+
+.project-item-ol ol {
+	list-style: lower-roman inside;
+}
+
+.project-item-ol ol ol {
+	list-style: lower-alpha inside;
+}
+
+.project-item-dl {
+    line-height: 2;
+    list-style: disc inside;
+    margin: 0 1rem 1rem 2rem;
+}
+
+.project-item-dl dt, .project-item-dl dd {
+	padding-left: 0;
+}
+
+.project-item-dl dd p {
+    margin: 0;
+}
+
+.project-item-dl dl.row{
+	margin-left: 0;
+}
+
+.project-item-blockquote {
+	margin-left: 2rem;
+	padding: 0.25rem 1rem;
+    border-left: 5px solid rgba(0, 0, 0, 0.08);
+}
+
+.project-item-blockquote p {
+	font-size: 1rem;
+	color: rgba(0, 0, 0, 0.54);
+}
+
+.project-item-blockquote footer.blockquote-footer {
+	font-size: 1rem;
+	color: rgba(0, 0, 0, 0.28);
+	font-weight: 500;
+}
+
+
+
 
 
 /*
