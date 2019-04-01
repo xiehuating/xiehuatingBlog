@@ -71,5 +71,23 @@ window.onload = function() {
 	// }, false);
 
 
-
 }
+
+// magnific popup image
+
+$(document).ready(function() {
+	$('.image-popup-fit-width').magnificPopup({
+		type: 'image',
+		closeOnContentClick: true,
+		showCloseBtn: false,
+		closeBtnInside: false,
+		image: {
+			verticalFit: false
+		},
+		zoom: {
+		    enabled: true, 
+		    duration: 300, 
+		    easing: 'ease-in-out'
+		}
+    });
+});
