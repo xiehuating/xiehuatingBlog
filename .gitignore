@@ -3,4 +3,5 @@
 0.Magnet/
 0.three.js-master/
 0.material/
-0.Plugins
+0.Plugins/
+node_modules/

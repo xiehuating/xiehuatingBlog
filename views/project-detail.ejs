@@ -1,61 +1,11 @@
-<!doctype html>
-
-<html lang="en-US" >
-
-	<head>
-
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="xiehuating, huating, blog, resume, portfolio">
-		<meta name="author" content="huating, xiehuating">
-		<title> Huating's Personal Site</title>
-
-		<link rel="stylesheet" href="public/css/bootstrap.css">
-		<link rel="stylesheet" href="public/css/magnific-popup.css">
-		<link rel="stylesheet" href="public/css/style.css">
-
-		<script type="text/javascript" src="public/js/jquery-3.3.1.js"></script>
-		<script type="text/javascript" src="public/js/bootstrap.js"></script>
-		<script type="text/javascript" src="public/js/customize.js"></script>
-		<script type="text/javascript" src="public/js/jquery.magnific-popup.js"></script>
-		
-	</head>
-	
-	<body>
-		
-		<header>
-			<nav class="navbar fixed-top navbar-expand-sm navbar-light mb-4" id="navbar">
-				<div class="container">
-					<a class="navbar-brand" href="index.html">
-						<img src="public/images/xht.svg" id="brand-logo" class="d-inline-block align-top" alt="XHT">
-					</a>
-
-					<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-
-					<div class="navbar-collapse collapse" id="navbarCollapse">
-						<ul class="navbar-nav mr-auto">
-							<li class="nav-item active">
-								<a class="nav-link" href="projects.html">PROJECTS</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="blogs.html">BLOGS</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="aboutme.html">ABOUT</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-		</header>
+<%- include("head") %>
+<%- include("header") %>
 
 		<div id="project-detail-caption" class="project-detail-h1">
 			<div class="container">
 				<div class="row">
 					<div class="offset-lg-1 col-lg-10">
-						<h1>Project Item Caption</h1>
+						<h1><%= title %></h1>
 						<p>of Product Design</p>
 						<p>of Product Design</p>
 					</div>
@@ -91,8 +41,8 @@
 					<!-- figure -->
 					<h3>大图 h3. Bootstrap heading</h3>
 					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://www.xiehuating.com/test/portfolio-img2.jpg" title="">
-							<img src="http://www.xiehuating.com/test/portfolio-img2.jpg" class="img-fluid pimg" alt="Responsive image">
+						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/test/portfolio-img2.jpg" title="">
+							<img src="http://design-projects.xiehuating.com/test/portfolio-img2.jpg" class="img-fluid pimg" alt="Responsive image">
 						</a>
 						<p class="project-item-image-caption">
 							Project Item Image Caption | 图片中文标题
@@ -101,8 +51,8 @@
 
 					<h3>单张小图居中</h3>
 					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://www.xiehuating.com/test/portfolio-img3.jpg" title="">
-							<img src="http://www.xiehuating.com/test/portfolio-img3.jpg" class="img-fluid pimg" alt="Responsive image">
+						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/test/portfolio-img3.jpg" title="">
+							<img src="http://design-projects.xiehuating.com/test/portfolio-img3.jpg" class="img-fluid pimg" alt="Responsive image">
 						</a>
 						<p class="project-item-image-caption">
 							Project Item Image Caption | 图片中文标题
@@ -112,16 +62,16 @@
 					<h3>图片+图片</h3>
 					<figure class="text-center project-item-image two-image-col row">
 						<div class="col-lg-6">
-							<a class="image-popup-fit-width" href="http://www.xiehuating.com/test/portfolio-img3.jpg" title="">
-								<img src="http://www.xiehuating.com/test/portfolio-img3.jpg" class="img-fluid" alt="Responsive image">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/test/portfolio-img3.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/test/portfolio-img3.jpg" class="img-fluid" alt="Responsive image">
 							</a>
 							<p class="project-item-image-caption">
 								Project Item Image Caption | 图片中文标题
 							</p>
 						</div>
 						<div class="col-lg-6">
-							<a class="image-popup-fit-width" href="http://www.xiehuating.com/test/portfolio-img3.jpg" title="">
-								<img src="http://www.xiehuating.com/test/portfolio-img3.jpg" class="img-fluid" alt="Responsive image">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/test/portfolio-img3.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/test/portfolio-img3.jpg" class="img-fluid" alt="Responsive image">
 							</a>
 							<p class="project-item-image-caption">
 								Project Item Image Caption | 图片中文标题
@@ -132,8 +82,8 @@
 					<h3>图片+文字</h3>
 					<figure class="text-center project-item-image two-image-col row">
 						<div class="col-lg-6">
-							<a class="image-popup-fit-width" href="http://www.xiehuating.com/test/portfolio-img3.jpg" title="">
-								<img src="http://www.xiehuating.com/test/portfolio-img3.jpg" class="img-fluid" alt="Responsive image">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/test/portfolio-img3.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/test/portfolio-img3.jpg" class="img-fluid" alt="Responsive image">
 							</a>
 							<p class="project-item-image-caption">
 								Project Item Image Caption | 图片中文标题
@@ -312,49 +262,4 @@
 			</div>
 		</main>
  
-
-		<footer class="footer">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-3 col-md-3 footer-brand-logo-col">
-						<a class="" href="#">
-							<img src="public/images/xht.svg" id="" class="footer-brand-logo" alt="XHT">
-						</a>
-					</div>
-					<div class="col-lg-4 col-md-4 footer-address-col">
-						<p>
-							NO.290, Lane 108 DongMei Road, ShangHai
-						</p>
-					</div>
-					<div class="col-lg-4 offset-lg-1 col-md-4 offset-md-1 footer-contact-col">
-						<p>
-							<a href="mailto:xie-huating@163.com">
-								xie-huating@163.com
-							</a>
-						</p>
-						<p>
-							86-18016275139
-						</p>
-					</div>
-					<div class="clearfix col-lg-12 col-md-12">
-						<hr>
-					</div>
-					<div class="offset-lg-3 col-lg-9 offset-md-3 col-md-9">
-						<div>
-							<p>
-								© 2019 XieHuating | <a class="link" href="http://www.miitbeian.gov.cn" target="blank">沪ICP备14024470号-1</a>
-							</p>
-						</div>
-					</div>
-
-
-				</div>
-
-			</div>
-		</footer>
-
-		
-
-	</body>
-
-</html>
+<%- include("footer") %>
