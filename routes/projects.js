@@ -6,7 +6,9 @@ const checkLogin = require('../middlewares/check').checkLogin;
 // GET /posts 所有用户或者特定用户的文章页
 //   eg: GET /posts?author=xxx
 router.get('/', function (req, res, next) {
-  res.render('projects',{});
+	res.render('projects',{
+  		path: "projects"
+  	});
 });
 
 // POST /posts/create 发表一篇文章
@@ -21,9 +23,9 @@ router.get('/', function (req, res, next) {
 
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
-  res.render('project-detail',{
+	res.render('project-detail',{
   	  	title: req.params.postId
-  });
+  	});
 });
 
 // GET /posts/:postId/edit 更新文章页

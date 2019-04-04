@@ -74,6 +74,7 @@ window.onload = function() {
 }
 
 // magnific popup image
+// https://blog.csdn.net/chenzhijie101/article/details/78157916
 
 $(document).ready(function() {
 	$('.image-popup-fit-width').magnificPopup({
@@ -91,3 +92,35 @@ $(document).ready(function() {
 		}
     });
 });
+
+
+//根据加载进度来改变进度条中bar的框width值
+
+$(document).ready(   
+function() {
+	var oImg = $('img');//获取所有图片
+	var num = 0;
+
+	oImg.each(function(i){
+	    var cImg = new Image();//新建图像对象
+	    cImg.onload = null; //防止重复加载
+
+		cImg.onload = function() {
+			num++;
+			var progressBar = $( '.progress-bar' );
+			var progress = $( '.progress' );
+
+			var scale = parseInt( num / $( 'img' ).length * 100 );//实时更新数据
+			progressBar[0].style.width = scale + '%';//设置进度条
+
+			if ( num >= $('img').length ) { //判断是否加载完毕
+				setTimeout( function( ) { progress.fadeOut( 200 ) }, 600 ); 
+			}
+		}
+		cImg.src = oImg[ i ].src;//src放在load后面，是防止在IE中出错
+	});
+}
+);
+
+
+
