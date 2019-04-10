@@ -22,8 +22,20 @@ router.get('/', function (req, res, next) {
 // });
 
 // GET /posts/:postId 单独一篇的文章页
-router.get('/:postId', function (req, res, next) {
-  res.send('文章详情页');
+// router.get('/:postId', function (req, res, next) {
+//   res.send('文章详情页');
+// });
+
+router.get('/revit-2019-new-material-analysis', function (req, res, next) {
+	res.render('./blogs/revit-2019-new-material-analysis',{
+  	  	// title: req.params.postId
+  	});
+});
+
+router.get('/table-th-nowrap', function (req, res, next) {
+	res.render('./blogs/table-th-nowrap',{
+  	  	// title: req.params.postId
+  	});
 });
 
 // GET /posts/:postId/edit 更新文章页

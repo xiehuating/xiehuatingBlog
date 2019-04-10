@@ -82,13 +82,16 @@ $(document).ready(function() {
 		closeOnContentClick: true,
 		showCloseBtn: false,
 		closeBtnInside: false,
+		fixedContentPos: 'auto',
+		mainClass: 'mfp-no-margins mfp-with-zoom',
+		overflowY: 'auto',
 		image: {
 			verticalFit: false
 		},
 		zoom: {
 		    enabled: true, 
 		    duration: 300, 
-		    easing: 'ease-in-out'
+		    easing: 'ease-out'
 		}
     });
 });

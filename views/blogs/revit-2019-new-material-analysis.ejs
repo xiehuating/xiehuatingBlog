@@ -1,0 +1,674 @@
+<%- include("../head") %>
+<%- include("../loading-progress-bar") %>
+<%- include("../header-blogs") %>
+		
+
+		
+
+		<main role="main" class="container">
+			<div class="row">
+				<div class="offset-lg-1 col-lg-10 project-item project-article" id="">
+					<!-- header figure -->
+					<div id="project-detail-caption" class="project-detail-h1">
+						<h1>Revit 2019 新材质简析</h1>
+						<div class="article-description">
+							<span class="article-writer" title="Article Writer">
+								<span class="article-description-icon"></span>
+								<p>Xie Huating</p>
+							</span>
+							<span class="article-date" title="Publish Date">
+								<span class="article-description-icon"></span>
+								<p><time>2019.03.21</time></p>
+							</span>
+							<span class="article-tag" title="Article Tag">
+								<span class="article-description-icon"></span>
+								<p class="">WebGL</p>
+								<p class="">UX</p>
+							</span>
+						</div>
+					</div>
+					<figure class="text-center project-item-banner">
+						<img src="http://design-works.vavaga.com/testXHR/blog-image1.jpg" class="img-fluid" alt="Responsive image">
+					</figure>
+					<p class="project-item-paragraph">
+						Revit 2019新增了一个材质类型，该新增材质类似于PBR材质，带有粗糙度/Roughness、反射/Reflectance、金属度/Metalness （有金属度，但是未直接暴露在材质管理器界面中）等参数。那么在这篇文章中我们来看一下新材质控制属性有哪些变化？可以实现哪些效果？基于WebGL的BIM轻量化显示引擎需如何准确的在WebGL中还原此新外观材质？
+					</p>
+
+					<p class="project-item-paragraph">
+						本文分享我个人在探索Revit 2019 New Material属性时的一些发现。在此基础上尝试将Revit 2019 New Material的属性参数映射到ThreeJS MeshStandardMaterial的参数上，在WebGL中还原Revit 2019 New Material的基本显示效果。
+					</p>
+
+					<h2>新材质的外观资源属性</h2>
+					<h3>Revit 2019帮助文档</h3>
+					<p class="project-item-paragraph">
+						在Revit 2019 的帮助文档中详细描述了新材质的外观资源属性的参数。 有下列9种外观资源属性控制组：
+					</p>
+
+					<dl class="row list-unstyled project-item-dl">
+						<dt class="col-sm-3">
+							<a href="http://help.autodesk.com/view/RVT/2019/CHS/?guid=GUID-3A3E8C8D-36C7-48F1-B5FB-C44B574E4E3F" >1.信息属性</a>
+						</dt>
+						<dd class="col-sm-9">定义可提供含义并将有助于您在搜索中找到资源的名称、说明和关键字。</dd>
+
+						<dt class="col-sm-3">
+							<a href="http://help.autodesk.com/view/RVT/2019/CHS/?guid=GUID-1E0D0975-6B12-47E6-AE92-BF8E4EF70748">2.参数</a>
+						</dt>
+						<dd class="col-sm-9">指定其颜色和其他视觉质量以表示材质。</dd>
+
+						<dt class="col-sm-3 text-truncate">
+							<a href="http://help.autodesk.com/view/RVT/2019/CHS/?guid=GUID-779BD70D-5C91-48CB-8AD4-2F4B3FD2C1E0">3.半透明度</a>
+						</dt>
+						<dd class="col-sm-9">指定属性以模拟光线穿过材质。</dd>
+
+						<dt class="col-sm-3 text-truncate">
+							<a href="http://help.autodesk.com/view/RVT/2019/CHS/?guid=GUID-AF4B1C96-28B3-42BD-949E-449EFBE9456D">4.辐射率</a>
+						</dt>
+						<dd class="col-sm-9">指定亮度和颜色属性以确定从材质发出的光的质量。</dd>
+
+						<dt class="col-sm-3 text-truncate">
+							<a href="http://help.autodesk.com/view/RVT/2019/CHS/?guid=GUID-71574CD7-4031-4E67-B1EF-A5A2264230AE">5.浮雕图案（凹凸）</a>
+						</dt>
+						<dd class="col-sm-9">指定将用于在材质表面上创建纹理的图像。</dd>
+
+						<dt class="col-sm-3 text-truncate">
+							<a href="http://help.autodesk.com/view/RVT/2019/CHS/?guid=GUID-923384A3-8F6F-421E-BD7A-786B07E87831">6.镂空图像</a>
+						</dt>
+						<dd class="col-sm-9">指定将用于在材质的表面中剪切孔的图像。</dd>
+
+						<dt class="col-sm-3 text-truncate">
+							<a href="http://help.autodesk.com/view/RVT/2019/CHS/?guid=GUID-50E9D76E-0243-428D-ABA6-5FE704D8357D">7.高级高光控件</a>
+						</dt>
+						<dd class="col-sm-9">定义根据用户查看材质的方向而更改其外观的属性。例如，当您围绕织物旋转时，天鹅绒的外观会发生改变。</dd>
+
+						<dt class="col-sm-3 text-truncate">
+							<a href="http://help.autodesk.com/view/RVT/2019/CHS/?guid=GUID-DBF7D399-A102-456D-ADFE-00268BA215C4">8.玻璃属性</a>
+						</dt>
+						<dd class="col-sm-9">定义影响穿过材质的光的数量和质量的属性。</dd>
+
+						<dt class="col-sm-3 text-truncate">
+							<a href="http://help.autodesk.com/view/RVT/2019/CHS/?guid=GUID-4453BDAB-756A-47ED-8C21-21A6D9463F6C">9.分层属性</a>
+						</dt>
+						<dd class="col-sm-9">定义基础颜色、高光以及表面涂层的属性。</dd>
+					</dl>
+
+					<h3>外观资源属性效果图例</h3>
+					<p class="project-item-paragraph">
+						通过Revit 2019的帮助文档的官方描述，可以很全面的了解新材质的9种控制外观资源属性的控制组，以及每个控制组可以控制材质哪些显示效果，文档描述很准确但却不够直观。我们通过在revit材质编辑器中的截图直观的了解一下这9种外观资源属性是如何影响材质的外观显示的。
+					</p>
+
+					<figure class="text-center project-item-image two-image-col row">
+						<div class="col-lg-6">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/1.infomation.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/1.infomation.jpg" class="img-fluid" alt="Responsive image">
+							</a>
+							<p class="project-item-image-caption">
+								1.信息属性 / Infomation
+							</p>
+						</div>
+						<div class="col-lg-6">
+							<p class="project-item-paragraph">
+								信息属性中包含对材质实例定义的字符串描述，如实例名称、实例应用说明、实例搜索关键字。
+							</p>
+							<p class="project-item-paragraph">
+								此外观资源属性不影响新材质外观显示效果。
+							</p>
+
+						</div>
+					</figure>
+
+					<figure class="text-center project-item-image two-image-col row">
+						<div class="col-lg-6">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/2.Parameters.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/2.Parameters.jpg" class="img-fluid" alt="Responsive image">
+							</a>
+							<p class="project-item-image-caption">
+								2.参数 / Parameters
+							</p>
+						</div>
+						<div class="col-lg-6">
+							<p class="project-item-paragraph">
+								材质的基本属性都在这个卷展栏中控制。基础颜色，颜色贴图，粗糙度等。
+							</p>
+							<p class="project-item-paragraph">
+								这是最重要最基本的外观资源属性，其中颜色、折射指数、反射、粗糙度都决定了材质最基本外观特性，且和PBR材质类型的属性高度匹配。所以，如果使用ThreeJS MeshStandardMaterial来还原显示此新材质，那么这个卷展栏中的属性是必须要实现的。
+							</p>
+						</div>
+					</figure>
+
+					<figure class="text-center project-item-image two-image-col row">
+						<div class="col-lg-6">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/3.translucency.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/3.translucency.jpg" class="img-fluid" alt="Responsive image">
+							</a>
+							<p class="project-item-image-caption">
+								3.半透明度 / Translucency
+							</p>
+						</div>
+						<div class="col-lg-6">
+							<p class="project-item-paragraph">
+								此处的半透明度控制的不是材质的透明度，而是材质的次表面散射。
+							</p>
+							<p class="project-item-paragraph">
+								真实世界中，带有次表面散射的材质有：玉石，蜡烛，葡萄，剥了皮的橘子，人体的皮肤肌肉。这些材质被光照照射的时候光能够穿透到材质内部，但是又无法直接完全的穿透，所以光在物体内部向各个方向上散射产生了这种效果。
+							</p>
+							<p class="project-item-paragraph">
+								这是一个比较高级的显示效果，在Revit的Realistic模式下不应用此效果，在Revit的Ray Trace显示模式下可以看到效果。
+							</p>
+						</div>
+					</figure>
+
+					<figure class="text-center project-item-image two-image-col row">
+						<div class="col-lg-6">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/4.emissivity.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/4.emissivity.jpg" class="img-fluid" alt="Responsive image">
+							</a>
+							<p class="project-item-image-caption">
+								4.辐射率 / Emissivity
+							</p>
+						</div>
+						<div class="col-lg-6">
+							<p class="project-item-paragraph">
+								辐射率产生的效果相当于自发光。使用了物理真实的亮度单位：cd/m²描述辐射强度。观察材质预览器中的显示效果设置此参数后，不仅仅是材质自身发光，还能真实的照亮周围环境。
+							</p>
+							<p class="project-item-paragraph">
+								这是一个比较高级的显示效果，在Revit的Realistic模式下不应用此效果，在Revit的Ray Trace显示模式下可以看到效果。
+							</p>
+						</div>
+					</figure>
+
+					<figure class="text-center project-item-image two-image-col row">
+						<div class="col-lg-6">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/5.bump.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/5.bump.jpg" class="img-fluid" alt="Responsive image">
+							</a>
+							<p class="project-item-image-caption">
+								5.浮雕图案（凹凸）/ Relief Pattern(Bump)
+							</p>
+						</div>
+						<div class="col-lg-6">
+							<p class="project-item-paragraph">
+								这个属性很好理解就是描述材质表面的凹凸。这里描述凹凸的图片既能使用蓝色法线贴图，又能使用黑白灰的凹凸贴图。对于凹凸强度的控制不在浮雕图案（凹凸）的卷展栏中，而在纹理编辑器中，通过Transforms>Scale>Depth Amount修改。
+							</p>
+						</div>
+					</figure>
+
+					<figure class="text-center project-item-image two-image-col row">
+						<div class="col-lg-6">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/6.cuntout.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/6.cuntout.jpg" class="img-fluid" alt="Responsive image">
+							</a>
+							<p class="project-item-image-caption">
+								6.镂空图像 / Cutout
+							</p>
+						</div>
+						<div class="col-lg-6">
+							<p class="project-item-paragraph">
+								alpha蒙版贴图，贴图上支持黑和白两种颜色，材质上对应黑色处完全透明，材质上对应白色处完全不透明。
+							</p>
+							<p class="project-item-paragraph">
+								在需要制作镂空的面板时会使用这种外观资源属性。比如：带有孔洞的铝合金吊顶扣板。
+							</p>
+						</div>
+					</figure>
+
+					<figure class="text-center project-item-image two-image-col row">
+						<div class="col-lg-6">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/7.advanced-highlight-controls.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/7.advanced-highlight-controls.jpg" class="img-fluid" alt="Responsive image">
+							</a>
+							<p class="project-item-image-caption">
+								7.高级高光控件 / Advanced Highlight Controls
+							</p>
+						</div>
+						<div class="col-lg-6">
+							<p class="project-item-paragraph">
+								高级的高光效果控制选项，可以控制高光的各向异性、高光的方向、高光的颜色、衰减方式等。看上去并不像是PBR材质那种完全基于物理真实的属性控制方式。
+							</p>
+							<p class="project-item-paragraph">
+								这是一个比较高级的显示效果，很少材质效果需要使用高级高光控件表达。高级高光控件可以表达拉丝金属、天鹅绒这类高光变化复杂的材质。
+							</p>
+						</div>
+					</figure>
+
+					<figure class="text-center project-item-image two-image-col row">
+						<div class="col-lg-6">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/8.glazing.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/8.glazing.jpg" class="img-fluid" alt="Responsive image">
+							</a>
+							<p class="project-item-image-caption">
+								8.玻璃属性 / Glazing
+							</p>
+						</div>
+						<div class="col-lg-6">
+							<p class="project-item-paragraph">
+								专门定义玻璃的材质属性。
+							</p>
+						</div>
+					</figure>
+
+					<figure class="text-center project-item-image two-image-col row">
+						<div class="col-lg-6">
+							<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/9.layered.jpg" title="">
+								<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/9.layered.jpg" class="img-fluid" alt="Responsive image">
+							</a>
+							<p class="project-item-image-caption">
+								9.分层属性 / Layered
+							</p>
+						</div>
+						<div class="col-lg-6">
+							<p class="project-item-paragraph">
+								类似于VRay中的VRayCarPaintMtl，现实生活中对应的类似材质为：珍珠、金属漆、指甲油。此材质可以设置两层材质的颜色高光效果。
+							</p>
+							<p class="project-item-paragraph">
+								举例来说，分层属性的最终显示的效果就像豪华汽车的金属漆；或是女孩子图的指甲油，底层图一层红色的指甲油，待底层红色指甲油干透后在其上再图一层半透明的指甲油，最后呈现出有光泽、层次丰富、颜色带有微妙变化的视觉效果。
+							</p>
+							<p class="project-item-paragraph">
+								这是一个比较高级的效果，在Revit的Realistic模式下不能完全显示此效果，在Revit的Ray Trace显示模式下可以看到效果。
+							</p>
+						</div>
+					</figure>
+
+					<p class="project-item-paragraph">
+						我查看了Revit 2019自带材质库AEC Material中所有Revit实例，通过对比外观材质面板的外观资源属性的组成，可以将新材质分为5种类型，分别是：
+					</p>
+					<ul class="list-unstyled project-item-ul">
+						<li>Opaque： 应用于不透明的非金属材质；</li>
+						<li>Metal： 应用于金属材质材质；</li>
+						<li>Tranparent： 应用于透明的非金属材质；</li>
+						<li>Glazing： 应用于玻璃材质；</li>
+						<li>Layerd： 应用于金属漆材质；</li>
+					</ul>
+
+					<p class="project-item-paragraph">
+						Revit 2019 新材质的这5种分类分别由上述介绍的9种外观资源属性的来组成。下表列出了5种材质类型的所包含的外观资源属性：
+					</p>
+
+					<div class="project-item-table">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+								    <tr>
+										<th scope="col">#</th>
+										<th scope="col">Type</th>
+										<th scope="col">信息属性</th>
+										<th scope="col">参数</th>
+										<th scope="col">半透明度</th>
+										<th scope="col">辐射率</th>
+										<th scope="col">浮雕图案（凹凸）</th>
+										<th scope="col">镂空图像</th>
+										<th scope="col">高级高光控件</th>
+										<th scope="col">玻璃属性</th>
+										<th scope="col">分层属性</th>
+								    </tr>
+								</thead>
+								<tbody>
+								    <tr>
+										<th scope="row">1</th>
+										<td>Opaque</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								    <tr>
+										<th scope="row">2</th>
+										<td>Metal</td>
+										<td>●</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+
+								    </tr>
+								    <tr>
+										<th scope="row">3</th>
+										<td>Tranparent</td>
+										<td>●</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								    <tr>
+										<th scope="row">4</th>
+										<td>Glazing</td>
+										<td>●</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>--</td>
+								    </tr>
+								    <tr>
+										<th scope="row">5</th>
+										<td>Layered</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+										<td>●</td>
+								    </tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="project-item-table-caption">
+							5种材质类型分别包含的外观资源属性
+						</p>
+					</div>
+
+					<p class="project-item-paragraph">
+						如果将.rvt工程文件从Revit 2019中转换出来，那么转换后得到材质的JSON描述文件也能从侧面印证这点。在JSON文件中有一个“BaseSchema”属性和一个“localname”属性，这两个属性有5种值分别对应到这5种类型，并且还有一个“UIDefinition”的属性，其定义了决定材质实例外观资源属性UI面板的xml文件地址。见下表：
+					</p>
+
+					<div class="project-item-table">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+								    <tr>
+										<th scope="col">#</th>
+										<th scope="col">Type</th>
+										<th scope="col">JSON中localname</th>
+										<th scope="col">JSON中BaseSchema</th>
+										<th scope="col">JSON中UIDefinition</th>
+								    </tr>
+								</thead>
+								<tbody>
+								    <tr>
+										<th scope="row">1</th>
+										<td><a href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/opaque.json">Opaque</a></td>
+										<td>Opaque</td>
+										<td>PrismOpaqueSchema</td>
+										<td>Mats/PrismOpaque/PrismOpaqueUI.xml</td>
+								    </tr>
+								    <tr>
+										<th scope="row">2</th>
+										<td><a href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/metal.json">Metal</a></td>
+										<td>Metal</td>
+										<td>PrismMetalSchema</td>
+										<td>Mats/PrismMetal/PrismMetalUI.xml</td>
+								    </tr>
+								    <tr>
+										<th scope="row">3</th>
+										<td><a href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/transparent.json">Transparent</a></td>
+										<td>Tranparent</td>
+										<td>PrismTransparentSchema</td>
+										<td>Mats/PrismTransparent/PrismTransparentUI.xml</td>
+								    </tr>
+								    <tr>
+										<th scope="row">4</th>
+										<td><a href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/glazing.json">Glazing</a></td>
+										<td>Glazing</td>
+										<td>PrismGlazingSchema</td>
+										<td>Mats/PrismGlazing/PrismGlazingUI.xml</td>
+								    </tr>
+								    <tr>
+										<th scope="row">5</th>
+										<td><a href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/layered.json">Layered</a></td>
+										<td>Layered</td>
+										<td>PrismLayeredSchema</td>
+										<td>Mats/PrismLayered/PrismLayeredUI.xml</td>
+								    </tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="project-item-table-caption">
+							Type、localname、BaseSchema、UIDefinition对应关系
+						</p>
+					</div>
+
+					<h2>映射到ThreeJS MeshStandardMaterial</h2>
+					<p class="project-item-paragraph">
+						如果使用ThreeJS MeshStandardMaterial来还原Revit 2019 New Material的外观属性，我们可以如何映射这些参数值呢？
+						下图是两者属性映射关系的对应表：
+					</p>
+					<figure class="text-center project-item-image">
+						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/revit-2019-new-material-chart.png" title="">
+							<img src="http://design-projects.xiehuating.com/blogs/revit-2019-new-material-intro/revit-2019-new-material-chart.png" class="img-fluid pimg" alt="Responsive image">
+						</a>
+						<p class="project-item-image-caption">
+							Revit 2019 New Material VS ThreeJS MeshStandardMaterial 属性映射对应表
+						</p>
+					</figure>
+
+					<h2>映射中潜在问题</h2>
+
+					<h3>大量属性无法直接支持</h3>
+					<p class="project-item-paragraph">
+						通过上图属性映射对应表,我们可以发现ThreeJS MeshStandardMaterial能够直接支持的属性真的很少很少，不仅如此，能够直接支持的属性也存在很多局限性。使用ThreeJS预设材质支持限制如下：
+					</p>
+					<ul class="list-unstyled project-item-ul">
+						<li>4种外观资源属性无法直接使用ThreeJS MeshStandardMaterial的属性映射：<em>4.辐射率</em>，<em>7.高级高光控制</em>，<em>8.玻璃属性</em>，<em>9.分层属性</em></li>
+						<li>对于<em>2.参数</em>，无法使用MeshStandardMaterial提供新材质所有属性的支持。新材质中，吸收距离是和玻璃片的厚度相关的，无法映射到MeshStandardMaterial的Opacity；反射值在MeshStandardMaterial中是写死的，无法自定义。</li>
+						<li>对于<em>3.半透明度</em>，MeshStandardMaterial不支持次表面散射的显示效果，所以此属性无法使用MeshStandardMaterial材质直接支持。ThreeJS案例中有一个<a href="https://threejs.org/examples/?q=material#webgl_materials_translucency">次表面散射的实现效果</a>，可以整合进MeshStandardMaterial来实现。</li>
+						<li>对于<em>7.高级高光控制</em>，高光的各向异性、方向、颜色、形状都无法使用MeshStandardMaterial直接支持。需要自定义shader。</li>
+						<li>对于<em>8.玻璃属性</em>，透射粗糙度、反射颜色、可见光透光率也无法使用MeshStandardMaterial直接支持，MeshStandardMaterial的效果控制还未达到这种粒度。</li>
+						<li>对于<em>9.分层属性</em>，无法使用MeshStandardMaterial材质直接支持，但是此外观资源属性和ThreeJS MeshPhysicalMaterial比较类似，都有基础颜色和面漆概念，但是MeshPhysicalMaterial的实现效果远不及Revit 2019新材质，不过或许可以在此材质基础上进行改造。</li>
+					</ul>
+
+					<h3><em>2.参数</em>的属性组成</h3>
+					<p class="project-item-paragraph">
+						通过观察Revit自带的材质实例，对于不同类型的材质（Opaque、Metal、Transparent、Glazing、Layered），在<em>2.参数</em>中的属性是不同的。比如金属材质实例的2.参数中只有颜色与粗糙度；混凝土材质实例的<em>2.参数</em>中有颜色、粗糙度、反射。个人推测<em>2.参数</em>有多种变体，分别对应不同的BaseSchema的材质实例，对应关系如下表：
+					</p>
+					<div class="project-item-table">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+								    <tr>
+										<th scope="col">#</th>
+										<th scope="col">Type</th>
+										<th scope="col">JSON 中 BaseSchema</th>
+										<th scope="col">颜色或图像</th>
+										<th scope="col">吸收距离</th>
+										<th scope="col">折射指数</th>
+										<th scope="col">反射</th>
+										<th scope="col">粗糙度</th>
+								    </tr>
+								</thead>
+								<tbody>
+								    <tr>
+										<th scope="row">1</th>
+										<td>Opaque</td>
+										<td>PrismOpaqueSchema</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+										<td>●</td>
+										<td>●</td>
+								    </tr>
+								    <tr>
+										<th scope="row">2</th>
+										<td>Metal</td>
+										<td>PrismMetalSchema</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>●</td>
+								    </tr>
+								    <tr>
+										<th scope="row">3</th>
+										<td>Transparent</td>
+										<td>PrismTransparentSchema</td>
+										<td>●</td>
+										<td>●</td>
+										<td>●</td>
+										<td>--</td>
+										<td>●</td>
+								    </tr>
+								    <tr>
+										<th scope="row">4</th>
+										<td>Glazing</td>
+										<td>PrismGlazingSchema</td>
+										<td>●</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>●</td>
+								    </tr>
+								    <tr>
+										<th scope="row">5</th>
+										<td>Layered</td>
+										<td>PrismLayeredSchema</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="project-item-table-caption">
+							不同材质类型中2.参数中属性组成
+						</p>
+					</div>
+
+
+					<h3><em>2.参数</em>的反射属性</h3>
+					<p class="project-item-paragraph">
+						<em>2.参数</em>中的反射/Reflectance属性是可以调整的，调整范围为0.00至0.08。这个属性控制的是非金属材质垂直查看表面时表面反射了多少光线。其实定义的就是材质菲涅尔反射的F0值。在虚幻引擎和Substance软件的PBR材质中也都是可以调整的，但是ThreeJS的MeshStandardMaterial暂时不支持调整。不能自定义此属性的影响并不大，对于绝大部分的非金属材质来说，一个固定值（0.04或者0.05）是完全没问题的。
+					</p>
+
+					<h3>金属度的问题</h3>
+					<p class="project-item-paragraph">
+						在Revit 2019中，新材质的Metalness属性用户是不能直接控制的，所以我猜想Revit根据BaseSchema在后台定义了对应的Metalness的值，达到区分非金属材质和金属材质显示效果。对应的金属度值应该如下:
+					</p>
+					<div class="project-item-table">
+						<div class="table-responsive ">
+							<table class="table table-striped">
+								<thead>
+								    <tr>
+										<th scope="col">#</th>
+										<th scope="col">Type</th>
+										<th scope="col">JSON 中 BaseSchema</th>
+										<th scope="col">Metalness</th>
+								    </tr>
+								</thead>
+								<tbody>
+								    <tr>
+										<th scope="row">1</th>
+										<td>Opaque</td>
+										<td>PrismOpaqueSchema</td>
+										<td>0</td>
+								    </tr>
+								    <tr>
+										<th scope="row">2</th>
+										<td>Metal</td>
+										<td>PrismMetalSchema</td>
+										<td>1.00</td>
+								    </tr>
+								    <tr>
+										<th scope="row">3</th>
+										<td>Transparent</td>
+										<td>PrismTransparentSchema</td>
+										<td>0</td>
+								    </tr>
+								    <tr>
+										<th scope="row">4</th>
+										<td>Glazing</td>
+										<td>PrismGlazingSchema</td>
+										<td>0</td>
+								    </tr>
+								    <tr>
+										<th scope="row">5</th>
+										<td>Layered</td>
+										<td>PrismLayeredSchema</td>
+										<td>0</td>
+								    </tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="project-item-table-caption">
+							不同材质类型的金属度
+						</p>
+					</div>
+
+					<p class="project-item-paragraph">
+						Revit 2019新材质没有给用户提供Metalness的属性控制，可能出发点是想简化用户设置材质过程，或者直接认为用户完全没有控制金属度的必要，但是也降低了用户对材质的效果的控制力。用户无法控制Metalness的值，同样也无法上传MetalnessMap控制金属度，对于表达某些金属与非金属拼合的材质就比较麻烦了。
+					</p>
+
+					<p class="project-item-paragraph">
+						颜色、粗糙度、金属度，这三个是PBR材质最基础的控制属性。个人觉得不允许用户控制Metalness的值还是挺奇怪的。
+					</p>
+
+
+					<h3>凹凸贴图的问题</h3>
+					<p class="project-item-paragraph">
+						对于凹凸贴图的强度属性，可以在纹理编辑器中通过Depth属性控制。通过观察材质实例中的Depth属性，发现有Depth有两种类型的值，第一种是对凹凸深度的限定使用了物理真实的单位，第二种使用了非物理真实的单位。所以凹凸贴图的强度控制参数需要从纹理编辑器中获取而不是在浮雕图案（凹凸）卷展栏下。，另外一个需要考虑的问题是：如何将物理真实单位和非物理真实的单位映射到MeshStandardMaterial的bumpScale属性？
+					</p>
+					<p class="project-item-paragraph">
+						浮雕图案（凹凸）的凹凸贴图即可以使用bumpmap实现，也可以使用normalmap实现，如何判断出贴图是bumpmap还是normalmap，并准确应用到ThreeJS MeshStandardMaterial的normalMap属性和bumpMap属性中也是需要考虑的。
+					</p>
+
+					<h3>单位的问题</h3>
+					<p class="project-item-paragraph">
+						Revit 2019 新材质中，不仅材质的外观显示效果时符合真实世界，外观资源属性中有些单位也使用了物理真实的单位，这与Revit 2018前的老材质不同，老材质中很多强度控制都是使用0到1.0浮点数、或者0到100整数、这类百分比的控制方式。Revit 2019 new Material中物理现实单位如下：
+					</p>
+					<ul class="list-unstyled project-item-ul">
+						<li>Translucency > Depth 使用长度单位（毫米），范围是0.000mm至10.000mm</li>
+						<li>Emissivity > Luminance使用亮度单位（cd/m²），范围是0.00cd/m²至1000000.000mm</li>
+						<li>Relief Pattern (Bump) 中Depth使用长度单位（毫米）</li>
+					</ul>
+					<p class="project-item-paragraph">
+						这对参数值匹配映射到ThreeJS中产生了很大的挑战。需要考虑如何将Revit 2019新材质中的物理尺寸单位相对准确的转换到WebGL中的单位。
+					</p>
+
+					<h2>小结</h2>
+					<p class="project-item-paragraph">
+						粗略看来，想使用ThreeJS MeshStandardMaterial来完全还原Revit 2019新材质的显示效果是完全不可能的，即使图形开发人员花大量时间去自定义shader也未必能做到。
+					</p>
+					<p class="project-item-paragraph">
+						但我个人认为也没有太大的必要纠结于此。从产品的角度上来说，基于webGL的轻量化BIM显示引擎去对标Revit带有光线追踪效果的shader是完全没有必要的，而且这也不是webGL的强项；如果webGL BIM显示引擎的目标用户不是建筑设计师，那么外观材质显示的需求是非常低的，对于结构、暖通等业务方向，基本没有对Revit模型外观材质显示的需求，相比较的话Revit着色模式比真实外观对他们更有价值。再看市场的竞品，连Autodesk自家的BIM引擎Forge对Revit外观材质属性的支持数量也不超过三分之一，可想而知，想要使用webGL完全还原Revit 2019新材质还是有一定工作量和难度的。从国内Revit用户来看，在做公司外包项目时了解到的Revit用户（国内一超大房地产商的建筑设计师）在使用Revit的时候根本不知那些高级外观参数是做什么用的，或者就从来就没用过，使用最多的还是颜色和颜色贴图。
+					</p>
+					<p class="project-item-paragraph">
+						当然作为一款优秀的BIM轻量化引擎，显示效果肯定是非常重要的一部分，通过显示效果的提升。能提高产品逼格、也能拉开与同行竞品间的差距。如果要支持Revit 2019新材质的显示，个人认为可以从两个方面考虑：
+					</p>
+					<ul class="list-unstyled project-item-ul">
+						<li>第一，先支持基础的、最常用的外观特性。如：颜色、颜色贴图、透明度，这些最基础的外观特性如果不支持，材质是没办法显示的。</li>
+						<li>第二，正确的显示。用户需要能够通过材质显示效果直观的区分出材质大类，通过粗糙度、金属度等属性差异告诉用户哪些是木材？哪些是瓷砖？哪些是金属？哪些是混凝土？有些外观参数是影响构件造型的，比如镂空图像，如果不支持，那么构件模型显示就是不正确的。</li>
+						<li>第三，美学角度优化材质显示。在正确显示的基础上优化webGL材质参数，调整出惊艳的视觉效果。</li>
+					</ul>
+
+					<h2>参考资料</h2>
+					<dl class="row list-unstyled project-item-dl">
+						<dt class="col-sm-3">
+							Revit 2019帮助文档
+						</dt>
+						<dd class="col-sm-9"><a href="http://help.autodesk.com/view/RVT/2019/ENU/">http://help.autodesk.com/view/RVT/2019/ENU/</a></dd>
+						<dt class="col-sm-3">
+							ThreeJS文档
+						</dt>
+						<dd class="col-sm-9"><a href="https://threejs.org/docs/">https://threejs.org/docs/</a></dd>
+					</dl>
+
+					<div class="original-article-btn">
+							<a class="btn btn-dark" role="button" aria-pressed="true" href="https://threejs.org/docs/" target="_blank">博客链接</a>
+					</div>
+
+
+
+				</div>
+			</div>
+		</main>
+ 
+<%- include("../footer") %>

@@ -1,0 +1,454 @@
+<%- include("../head") %>
+<%- include("../loading-progress-bar") %>
+<%- include("../header-blogs") %>
+		
+
+		
+
+		<main role="main" class="container">
+			<div class="row">
+				<div class="offset-lg-1 col-lg-10 project-item project-article" id="">
+					<!-- header figure -->
+					<div id="project-detail-caption" class="project-detail-h1">
+						<h1>Bootstrap 表头单元格文本不换行</h1>
+						<div class="article-description">
+							<span class="article-writer" title="Article Writer">
+								<span class="article-description-icon"></span>
+								<p>Xie Huating</p>
+							</span>
+							<span class="article-date" title="Publish Date">
+								<span class="article-description-icon"></span>
+								<p><time>2019.03.21</time></p>
+							</span>
+							<span class="article-tag" title="Article Tag">
+								<span class="article-description-icon"></span>
+								<p class="">UX</p>
+								<p class="">UI</p>
+							</span>
+						</div>
+					</div>
+					<figure class="text-center project-item-banner">
+						<img src="http://design-works.vavaga.com/testXHR/blog-image1.jpg" class="img-fluid" alt="Responsive image">
+					</figure>
+					<p class="project-item-paragraph">
+						在使用Bootstrap表格时，当表格有很多列的情况下，可能会出现表格表格头单元格中的中文或者英文换行的情况。这不仅破坏表格的布局，而且当给<code>&lt;table&gt;</code>标签添加上<code>.table-responsive</code>样式后，表格表头的自动换行行为会使得Bootstrap表格无法显示水平方向的滚动条。这是并不是我们期望的行为。
+					</p>
+
+					<h2>错误示例</h2>
+					<h3>表头为中文的表格</h3>
+					<div class="project-item-table">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+								    <tr>
+										<th style="word-break: normal;white-space: normal;" scope="col">#</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">产品名称</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">产品生产编号</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">产品生产批次</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">产品类型</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">产品属性</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">产品重要参数</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">上架时间</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">下架时间</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">剩余库存</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">产品描述</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">产品标签</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">生产日期</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">生产地</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">生产厂家</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">置顶</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">产品备注</th>
+								    </tr>
+								</thead>
+								<tbody>
+								    <tr>
+										<th scope="row">1</th>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+								    </tr>
+								    <tr>
+										<th scope="row">2</th>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								    <tr>
+										<th scope="row">3</th>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="project-item-table-caption">
+							表头被自动换行的中文表格
+						</p>
+					</div>
+
+					<p class="project-item-paragraph">
+						可以看到上表中表头被严重挤压后自动换行，表格的第一行数据也被自动换行。而且在已经给<code>&lt;table&gt;</code>标签添加上<code>.table-responsive</code>样式的情况下，表头文字被挤压成完全垂直的一列后表格才会显示水平方向的滚动条。大部分情况下，我们并不希望表格以这种布局展现，很不美观，而且非常影响表格数据的可读性。
+					</p>
+
+					<h3>表头为英文的表格</h3>
+					<div class="project-item-table">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+								    <tr>
+										<th style="word-break: normal;white-space: normal;" scope="col">#</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Name</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Code</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Group</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Type</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Property</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Parameter</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Arrival Time</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Removed Time</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Inventory</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Description</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Tag</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Production Date</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Origin</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Product Factory</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Stick</th>
+										<th style="word-break: normal;white-space: normal;" scope="col">Notes</th>
+								    </tr>
+								</thead>
+								<tbody>
+								    <tr>
+										<th scope="row">1</th>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+								    </tr>
+								    <tr>
+										<th scope="row">2</th>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								    <tr>
+										<th scope="row">3</th>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="project-item-table-caption">
+							表头被自动换行的英文表格
+						</p>
+					</div>
+
+					<p class="project-item-paragraph">
+						英文表格的可读性要比起中文表格好一些，表格表头虽然被自动换行，但是换行的位置在单词间的空格处。给<code>&lt;table&gt;</code>标签添加上<code>.table-responsive</code>样式的情况下，表格显示出了水平方向的滚动条。
+					</p>
+
+					<h3>造成错误示例的原因</h3>
+
+					<p class="project-item-paragraph">
+						产生这种情况的原因是css样式表中，中文文本和英文文本的换行规则未定义。在未定义换行规则的情况下，<code>white-space</code>样式的缺省值为<code>normal</code>。当表格单元格宽度减小时，中文文本会以单个中文字进行换行，英文文本则是在英文单词间的空格处进行换行，所以就出现上述的情况。
+					</p>
+
+					<h2>正确示例</h2>
+					<p class="project-item-paragraph">
+						避免这种情况的解决方案非常简单，我们只需要在css样式表文本的换行规则即可，强制文本不进行换行。在已经给<code>&lt;table&gt;</code>标签添加上<code>.table-responsive</code>Bootstrap样式的情况下，再给<code>&lt;th&gt;</code>标签加上下面的css样式即可：
+					</p>
+
+					<pre><code>.table thead th {
+	white-space: nowrap; 
+}</code></pre>
+
+					<h3>表头为中文的表格</h3>
+					<div class="project-item-table">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+								    <tr>
+										<th scope="col">#</th>
+										<th scope="col">产品名称</th>
+										<th scope="col">产品生产编号</th>
+										<th scope="col">产品生产批次</th>
+										<th scope="col">产品类型</th>
+										<th scope="col">产品属性</th>
+										<th scope="col">产品重要参数</th>
+										<th scope="col">上架时间</th>
+										<th scope="col">下架时间</th>
+										<th scope="col">剩余库存</th>
+										<th scope="col">产品描述</th>
+										<th scope="col">产品标签</th>
+										<th scope="col">生产日期</th>
+										<th scope="col">生产地</th>
+										<th scope="col">生产厂家</th>
+										<th scope="col">置顶</th>
+										<th scope="col">产品备注</th>
+								    </tr>
+								</thead>
+								<tbody>
+								    <tr>
+										<th scope="row">1</th>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+										<td>这是一条被挤压的数据</td>
+								    </tr>
+								    <tr>
+										<th scope="row">2</th>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								    <tr>
+										<th scope="row">3</th>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="project-item-table-caption">
+							表头没有换行的中文表格
+						</p>
+					</div>
+
+
+
+					<h3>表头为英文的表格</h3>
+					<div class="project-item-table">
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+								    <tr>
+										<th scope="col">#</th>
+										<th scope="col">Product Name</th>
+										<th scope="col">Product Code</th>
+										<th scope="col">Product Group</th>
+										<th scope="col">Product Type</th>
+										<th scope="col">Product Property</th>
+										<th scope="col">Product Parameter</th>
+										<th scope="col">Arrival Time</th>
+										<th scope="col">Removed Time</th>
+										<th scope="col">Inventory</th>
+										<th scope="col">Product Description</th>
+										<th scope="col">Product Tag</th>
+										<th scope="col">Production Date</th>
+										<th scope="col">Product Origin</th>
+										<th scope="col">Product Factory</th>
+										<th scope="col">Stick</th>
+										<th scope="col">Notes</th>
+								    </tr>
+								</thead>
+								<tbody>
+								    <tr>
+										<th scope="row">1</th>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+										<td>This is a wrapped data string.</td>
+								    </tr>
+								    <tr>
+										<th scope="row">2</th>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								    <tr>
+										<th scope="row">3</th>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+										<td>--</td>
+								    </tr>
+								</tbody>
+							</table>
+						</div>
+						<p class="project-item-table-caption">
+							表头没有换行的英文表格
+						</p>
+					</div>
+					<p class="project-item-paragraph">
+						现在表头的样式看起来顺眼多了~
+					</p>
+
+					<h2>小结</h2>
+
+					
+
+					<h2>参考资料</h2>
+					<dl class="row list-unstyled project-item-dl">
+						<dt class="col-sm-3">
+							Bootstrap开发文档
+						</dt>
+						<dd class="col-sm-9"><a href="https://getbootstrap.com/docs/4.3/content/tables/">https://getbootstrap.com/docs/4.3/content/tables/</a></dd>
+						<dt class="col-sm-3">
+							MOZ CSS开发文档
+						</dt>
+						<dd class="col-sm-9"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/white-space">https://developer.mozilla.org/en-US/docs/Web/CSS/white-space</a></dd>
+					</dl>
+
+					<div class="original-article-btn">
+							<a class="btn btn-dark" role="button" aria-pressed="true" href="https://threejs.org/docs/" target="_blank">博客链接</a>
+					</div>
+
+				</div>
+			</div>
+		</main>
+ 
+<%- include("../footer") %>
