@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>City Skyline Demo</title>
+
+	<script type="text/javascript" src="/js/threejs/three.js"></script>
+	<script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
+	<script type="text/javascript" src="/js/threejs/examples/js/controls/OrbitControls.js"></script>
+	<script type="text/javascript" src="/js/threejs/examples/js/loaders/OBJLoader.js"></script>
+	<script type="text/javascript" src="/js/threejs/examples/js/libs/stats.min.js"></script>
+	<script type="text/javascript" src="/js/threejs/examples/js/libs/dat.gui.min.js"></script>
+
+	<script src="/js/threejs/examples/js/postprocessing/EffectComposer.js"></script>
+	<script src="/js/threejs/examples/js/postprocessing/RenderPass.js"></script>
+	<script src="/js/threejs/examples/js/postprocessing/MaskPass.js"></script>
+	<script src="/js/threejs/examples/js/postprocessing/ShaderPass.js"></script>
+	<script src="/js/threejs/examples/js/shaders/CopyShader.js"></script>
+
+	<script src="/js/threejs/examples/js/objects/sky.js"></script>
+
+	<style>
+		body{
+			/* set margin to 0 and overflow to hidden,
+			   to use the complete page*/
+			margin: 0;
+			overflow: hidden;
+			background-color: #ffffff;
+		}
+	</style>
+
+</head>
+
+<body style="background-color:#ffffff">
+	<!-- Div which will hold the output -->
+	<div id="WebGL-output">
+
+	</div>
+
+	<!-- Javascript code that runs our Three.js 3dviewer -->
+	<script type="text/javascript">
+
+		function init() {
+			
+			var clock = new THREE.Clock();
+
+			//create scene
+			var scene = new THREE.Scene();
+
+			scene.fog = new THREE.FogExp2( 0xa1b9db, 0.0009);
+			//cube envmap
+			var sceneCube = new THREE.Scene();
+
+			//create camera
+			var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+				//set camera attributes
+				camera.position.set(25,3,55);
+				camera.lookAt(scene.position);
+			scene.add(camera);
+
+			//cube envmap camera
+			var cameraCube = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+			scene.add(cameraCube);
+
+			//create renderer
+			var renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+				//set renderer attributes
+				renderer.setClearColor( 0xffffff );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight);
+				renderer.shadowMap.enabled = true;
+				renderer.gammaInput = true;
+				renderer.gammaOutput = true;
+				renderer.autoClear = false;
+				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+			//create stats monitor
+			var stats = new Stats();
+
+
+			//create grid helper
+			var size = 42;
+			var divisions = 3;
+			var gridHelper = new THREE.GridHelper( size, divisions );
+			//scene.add( gridHelper );
+
+			//create axis helper
+			var axes = new THREE.AxisHelper(30);
+			//scene.add(axes);
+
+
+			//create camera controls
+			var controls = new THREE.OrbitControls( camera );
+				//set camera controls attributes
+				controls.target.set(0, 13, 8);
+				controls.minDistance = 2;
+				controls.maxDistance = 3000;
+				controls.enablePan = false;
+
+			//create cube envmap
+	        var textureCube = createCubeMap();
+	        var shader = THREE.ShaderLib["cube"];
+	        
+	        var material = new THREE.ShaderMaterial({
+	            fragmentShader: shader.fragmentShader,
+	            vertexShader: shader.vertexShader,
+	            uniforms: shader.uniforms,
+	            depthWrite: false,
+	            side: THREE.BackSide
+	        });
+	        shader.uniforms["tCube"].value = textureCube;
+
+	        cubeMesh = new THREE.Mesh(new THREE.BoxGeometry(1000, 1000, 1000), material);
+	        sceneCube.add(cubeMesh);
+			
+			//loading manager
+			var manager = new THREE.LoadingManager();
+			manager.onProgress = function ( item, loaded, total ) {
+				console.log( item, loaded, total );
+			}
+
+			var onProgress = function ( xhr ) {
+				if ( xhr.lengthComputable ) {
+					var percentComplete = xhr.loader / xhr.total * 100;
+					console.log( Math.round( percentComplete, 2) + '% downloaded' );
+				}
+			};
+
+			var onError = function( xhr ){
+				console.log( xhr )
+			};
+
+			//load 2 color maps, 2 bump maps and 3 lightmap of textures 
+			// var textureColorForCushion = new THREE.Texture();
+			// var textureBumpForCushion = new THREE.Texture();
+			// var textureLightForCushion = new THREE.Texture();
+			
+			//
+			// var loader = new THREE.ImageLoader( manager ); 
+			// loader.load( 'model-stuff/chair/texture/fabric_blue.jpg', function ( image ) {
+			// 		textureColorForCushion.image = image;
+			// 		textureColorForCushion.needsUpdate = true;
+			// 		textureColorForCushion.wrapS = textureColorForCushion.wrapT = THREE.RepeatWrapping;
+			// 		textureColorForCushion.repeat.set( 3, 3 );		
+			// }, onProgress, onError);
+
+			// loader.load( 'model-stuff/chair/texture/fabric_blueBump.jpg', function ( image ) {
+			// 		textureBumpForCushion.image = image;
+			// 		textureBumpForCushion.needsUpdate = true;
+			// 		textureBumpForCushion.wrapS = textureBumpForCushion.wrapT = THREE.RepeatWrapping;
+			// 		textureBumpForCushion.repeat.set( 3, 3 );		
+			// }, onProgress, onError);
+
+			// loader.load( 'model-stuff/chair/texture/cushionLightMap.jpg', function ( image ) {
+			// 		textureLightForCushion.image = image;
+			// 		textureLightForCushion.needsUpdate = true;		
+			// }, onProgress, onError);
+
+			var textureCitySkyline = new THREE.Texture();
+			var textureCitySkylineAlpha = new THREE.Texture();
+			var textureCitySkyEnvMapWhite = new THREE.Texture();
+			var textureGroundAlpha = new THREE.Texture();
+
+			var loader = new THREE.ImageLoader( manager ); 
+
+			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/city-skyline.jpg', function ( image ) {
+					textureCitySkyline.image = image;
+					textureCitySkyline.needsUpdate = true;
+					textureCitySkyline.wrapS = textureCitySkyline.wrapT = THREE.RepeatWrapping;
+					textureCitySkyline.repeat.set( 0.5, 1 );		
+			}, onProgress, onError);
+
+			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/city-skyline-alpha.jpg', function ( image ) {
+					textureCitySkylineAlpha.image = image;
+					textureCitySkylineAlpha.needsUpdate = true;
+					textureCitySkylineAlpha.wrapS = textureCitySkylineAlpha.wrapT = THREE.RepeatWrapping;
+					textureCitySkylineAlpha.repeat.set( 0.5, 1 );		
+			}, onProgress, onError);
+
+			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/envMap-white.jpg', function ( image ) {
+					textureCitySkyEnvMapWhite.image = image;
+					textureCitySkyEnvMapWhite.needsUpdate = true;
+					textureCitySkyEnvMapWhite.wrapS = textureCitySkyEnvMapWhite.wrapT = THREE.RepeatWrapping;
+					textureCitySkyEnvMapWhite.repeat.set( 1, 1 );		
+			}, onProgress, onError);
+
+			loader.load( 'http://design-projects.xiehuating.com/demos/outdoor-building/textures/ground-alpha-mask.jpg', function ( image ) {
+					textureGroundAlpha.image = image;
+					textureGroundAlpha.needsUpdate = true;
+					textureGroundAlpha.wrapS = textureGroundAlpha.wrapT = THREE.RepeatWrapping;
+					textureGroundAlpha.repeat.set( 1, 1 );		
+			}, onProgress, onError);
+
+			var materialCitySkyline = new THREE.MeshStandardMaterial({
+							color: 0xfafafa,
+							map: textureCitySkyline,
+							roughness: 0,
+							metalness: 0,
+							blending: THREE.NormalBlending,
+							shading: THREE.SmoothShading,
+							alphaMap: textureCitySkylineAlpha,
+							transparent: true,
+							opacity: 0.6,
+							//envMap: textureCitySkyEnvMapWhite,
+							//envMapIntensity: 1,
+							//wireframe: true,	
+							emissive: 0xffffff,	
+							emissiveIntensity: 0.3,	
+							//side: THREE.DoubleSide,			
+						});
+
+			var materialGround = new THREE.MeshStandardMaterial({
+							color: 0xfafafa,
+							roughness: 1,
+							metalness: 0,
+							blending: THREE.NormalBlending,
+							shading: THREE.SmoothShading,
+							alphaMap: textureGroundAlpha,
+							transparent: true,
+							opacity: 1,
+						});
+
+			var materialWhite = new THREE.MeshStandardMaterial({
+							color: 0xfafafa,
+							roughness: 1,
+							metalness: 0,
+							blending: THREE.NormalBlending,
+							shading: THREE.SmoothShading,
+							//envMap: textureCube,
+							//side: THREE.DoubleSide,			
+					
+						});
+
+			var materialMetal = new THREE.MeshStandardMaterial({
+							color: 0xffffff,
+							roughness: 0.2,
+							metalness: 0.5,
+							blending: THREE.NormalBlending,
+							shading: THREE.SmoothShading,
+							envMap: textureCube,
+							envMapIntensity: 1,
+						});
+
+			var materialGlass = new THREE.MeshStandardMaterial({
+							color: 0x99ddff,
+							roughness: 0.1,
+							metalness: 0.5,
+							transparent: true,
+							opacity: 0.5,
+							blending: THREE.NormalBlending,
+							shading: THREE.SmoothShading,
+							envMap: textureCube,
+						});
+
+			//load obj models
+			var models = {
+				wall: "wall",
+				wall02: "wall02",
+				wall03: "wall03",
+				wall04: "wall04",
+				wall05: "wall05",
+				tube01:"tube01",
+				glass: "glass",
+				glassdoor: "glassdoor",
+				rail: "rail",
+				balcony01: "balcony01",
+				balcony02: "balcony02",
+				balcony03: "balcony03",
+				balcony04: "balcony04",
+				frame: "frame",
+				watertank: "watertank",
+				parterre: "parterre",
+				floor: "floor",
+
+				indoorComputer: "indoorComputer",
+				indoorLamp: "indoorLamp",
+				indoorLight: "indoorLight",
+				indoorPainting: "indoorPainting",
+				indoorShelve: "indoorShelve",
+				indoorSofa: "indoorSofa",
+				indoorTeatable: "indoorTeatable",
+				indoorWorktable: "indoorWorktable",
+
+				ground: "ground",
+			    sidewalk01: "sidewalk01",
+			    sidewalk02: "sidewalk02",
+			    sidewalk03: "sidewalk03",
+
+			    leftSideHouseWall: "leftSideHouseWall",
+			    leftSideHouseBalcony: "leftSideHouseBalcony",
+			    leftSideHouseTube: "leftSideHouseTube",
+			    leftSideHouseRail: "leftSideHouseRail",
+
+			    rightSideHouseWall: "rightSideHouseWall",
+			    antenna:"antenna",
+			    rightSideHouseShopDoor: "rightSideHouseShopDoor",
+			    rightSideHouseShopFront: "rightSideHouseShopFront",
+			    rightSideHouseShopFrontFrame: "rightSideHouseShopFrontFrame",
+			    rightSideHouseShopSecurityDoor: "rightSideHouseShopSecurityDoor",
+
+			    citySkyline: "citySkyline"
+			};  
+
+			var mainBuilding = new THREE.Object3D();
+			var leftBuilding = new THREE.Object3D();
+			var rightBuilding = new THREE.Object3D();
+			var territory = new THREE.Object3D();
+
+			var loader = new THREE.OBJLoader( manager );
+			//
+			//
+			//load obj model with function
+			//
+			//
+			loadObj("main_building_wall.obj", mainBuilding, models.wall, materialWhite);
+			loadObj("main_building_glass.obj", mainBuilding, models.glass, materialGlass);
+			loadObj("main_building_rail.obj", mainBuilding, models.rail, materialMetal);
+			loadObj("main_building_frame.obj", mainBuilding, models.frame, materialMetal);
+			loadObj("main_building_balcony01.obj", mainBuilding, models.balcony01, materialWhite);
+			loadObj("main_building_balcony02.obj", mainBuilding, models.balcony02, materialWhite);
+			loadObj("main_building_balcony03.obj", mainBuilding, models.balcony03, materialWhite);
+			loadObj("main_building_wall02.obj", mainBuilding, models.wall02, materialWhite);
+			loadObj("main_building_wall03.obj", mainBuilding, models.wall03, materialWhite);
+			loadObj("main_building_wall04.obj", mainBuilding, models.wall04, materialWhite);
+			loadObj("main_building_wall05.obj", mainBuilding, models.wall05, materialWhite);
+			loadObj("main_building_tube01.obj", mainBuilding, models.tube01, materialMetal);
+			loadObj("main_building_watertank.obj", mainBuilding, models.watertank, materialWhite);
+			loadObj("main_building_parterre.obj", mainBuilding, models.parterre, materialWhite);
+			loadObj("main_building_glassdoor.obj", mainBuilding, models.glassdoor, materialGlass);
+			loadObj("main_building_floor.obj", mainBuilding, models.floor, materialWhite);
+
+			loadObj("left_side_house_wall.obj", leftBuilding, models.leftSideHouseWall, materialWhite);
+			loadObj("left_side_house_balcony.obj", leftBuilding, models.leftSideHouseBalcony, materialWhite);
+			loadObj("left_side_house_rail.obj", leftBuilding, models.leftSideHouseRail, materialMetal);
+			loadObj("left_side_house_tube.obj", leftBuilding, models.leftSideHouseTube, materialMetal);
+
+			loadObj("right_side_house_wall.obj", rightBuilding, models.rightSideHouseWall, materialWhite);
+			loadObj("right_side_house_antenna.obj", rightBuilding, models.antenna, materialMetal);
+			loadObj("right_side_house_shopdoor.obj", rightBuilding, models.rightSideHouseShopDoor, materialWhite);
+			loadObj("right_side_house_shopfront.obj", rightBuilding, models.rightSideHouseShopFront, materialWhite);
+			loadObj("right_side_house_shopfrontframe.obj", rightBuilding, models.rightSideHouseShopFrontFrame, materialMetal);
+			loadObj("right_side_house_shopsecuritydoor.obj", rightBuilding, models.rightSideHouseShopSecurityDoor, materialWhite);
+
+			loadObj("ground.obj", territory, models.ground, materialGround);
+			loadObj("ground_sidewalk01.obj", territory, models.sidewalk01, materialWhite);
+			// loadObj("ground_sidewalk02.obj", territory, models.sidewalk02, materialWhite);
+			// loadObj("ground_sidewalk03.obj", territory, models.sidewalk03, materialWhite);
+
+			//load building obj model function
+			function loadObj(path, groupName, name, material) {
+				loader.load('http://design-projects.xiehuating.com/demos/outdoor-building/models/' + path, function( object ) {
+						object.traverse( function ( child ){
+							if ( child instanceof THREE.Mesh ) {
+								var uvs = child.geometry.attributes.uv.array;
+								child.geometry.addAttribute( 'uv2', new THREE.BufferAttribute( uvs, 2 ) );
+								child.material = material;
+								child.receiveShadow = true;
+								child.castShadow = true;
+							}
+						});
+					groupName[name] = object;
+					groupName[name].position.y = 0;
+					groupName.add( groupName[name] );
+
+				}, onProgress, onError);
+			}
+
+			loadSkyline("skyline001.obj", territory, models.citySkyline, materialCitySkyline);
+			//load city skyline obj model function
+			function loadSkyline(path, groupName, name, material) {
+				loader.load('http://design-projects.xiehuating.com/demos/city-skyline/models/' + path, function( object ) {
+						object.traverse( function ( child ){
+							if ( child instanceof THREE.Mesh ) {
+								var uvs = child.geometry.attributes.uv.array;
+								child.geometry.addAttribute( 'uv2', new THREE.BufferAttribute( uvs, 2 ) );
+								child.material = material;
+								child.receiveShadow = true;
+								child.castShadow = true;
+							}
+						});
+					groupName[name] = object;
+					groupName[name].position.y = 0;
+					groupName.add( groupName[name] );
+
+				}, onProgress, onError);
+			}
+
+
+
+			scene.add(mainBuilding);
+			scene.add(territory);
+			scene.add(leftBuilding);
+			scene.add(rightBuilding);
+
+			//add sunlight
+			var sunLight = new THREE.DirectionalLight( 0xffffff , 1 );
+				//set sunlight attributes
+				sunLight.color.setHex( 0xe1d6c4 );
+				sunLight.position.set(-100, 160, 100);
+				sunLight.intensity = 0.72;
+				sunLight.castShadow = true;
+				sunLight.distance = 300;
+				sunLight.exponent = 1;
+				sunLight.isDirectionalLight = true;
+				
+				sunLight.shadow.mapSize.width = 2048;
+				sunLight.shadow.mapSize.height = 2048;
+
+				sunLight.shadow.camera.near = 1;    
+				sunLight.shadow.camera.far = 500; 
+
+				sunLight.shadow.camera.left = -30;
+				sunLight.shadow.camera.bottom = -30;
+				sunLight.shadow.camera.right = 30;
+				sunLight.shadow.camera.top = 30;
+				sunLight.shadow.bias = 0;
+
+				scene.add(sunLight);
+
+			//add fill light
+			var fillLight01 = new THREE.DirectionalLight( 0xffffff , 1 );
+				fillLight01.color.setHex( 0x7b9bb4 );
+				fillLight01.position.set(60, 80, 130);
+				fillLight01.intensity = 0.28;
+				scene.add(fillLight01);
+
+			var fillLight02 = new THREE.DirectionalLight( 0xffffff , 1 );
+				fillLight02.color.setHex( 0x7b9bb4 );
+				fillLight02.position.set(100, 80, -100);
+				fillLight02.intensity = 0.22;
+				scene.add(fillLight02);
+
+			var fillLight03 = new THREE.DirectionalLight( 0xffffff , 1 );
+				fillLight03.color.setHex( 0x7b9bb4 );
+				fillLight03.position.set(-140, 80, -50);
+				fillLight03.intensity = 0.18;
+				scene.add(fillLight03);
+
+			//add hemilight
+			// hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.37 );
+			// 	hemiLight.color.setHex( 0xa5acb1);
+			// 	hemiLight.groundColor.setHex( 0xe6e4e1 );
+			// 	hemiLight.position.set( 0, 10, 0 );
+			// scene.add( hemiLight );
+
+			ambientLight = new THREE.AmbientLight(0xffffff, 0.40);
+			scene.add( ambientLight );
+
+			//light helper
+			var sunLightHelper = new THREE.DirectionalLightHelper( sunLight, 10 );
+			//scene.add( sunLightHelper );
+			var fillLight01Helper = new THREE.DirectionalLightHelper( fillLight01, 10 );
+			//scene.add( fillLight01Helper );
+			var fillLight02Helper = new THREE.DirectionalLightHelper( fillLight02, 10 );
+			//scene.add( fillLight02Helper );
+			var fillLight03Helper = new THREE.DirectionalLightHelper( fillLight03, 10 );
+			//scene.add( fillLight03Helper );
+
+
+
+
+			//output scene to html element
+			document.getElementById("WebGL-output").appendChild(renderer.domElement);
+
+			//output stats to html element
+			//document.getElementById("WebGL-output").appendChild(stats.dom);
+
+			//add window resize event
+			window.addEventListener( 'resize', onWindowResize, false);
+
+
+			initSky();
+
+			//sky shader
+			function initSky() {
+				// Add Sky
+				sky = new THREE.Sky();
+				sky.scale.setScalar( 450000 );
+				scene.add( sky );
+
+				// Add Sun Helper
+				sunSphere = new THREE.Mesh(
+					new THREE.SphereBufferGeometry( 20000, 16, 8 ),
+					new THREE.MeshBasicMaterial( { color: 0xffffff } )
+				);
+				sunSphere.position.y = - 700000;
+				sunSphere.visible = false;
+				scene.add( sunSphere );
+
+				/// GUI
+
+				var effectController  = {
+					turbidity: 2, //气象学浑浊度
+					rayleigh: 1, //天文学亮度单位
+					mieCoefficient: 0.002, //米氏散射系数
+					mieDirectionalG: 0.8,
+					luminance: 0.5, //亮度
+					inclination: -0.2030, // elevation / inclination
+					azimuth: 0.1680, // Facing front,
+					sun: ! true
+				};
+
+				var distance = 400000;
+
+				function guiChanged() {
+
+					var uniforms = sky.material.uniforms;
+					uniforms.turbidity.value = effectController.turbidity;
+					uniforms.rayleigh.value = effectController.rayleigh;
+					uniforms.luminance.value = effectController.luminance;
+					uniforms.mieCoefficient.value = effectController.mieCoefficient;
+					uniforms.mieDirectionalG.value = effectController.mieDirectionalG;
+
+					var theta = Math.PI * ( effectController.inclination - 0.5 );
+					var phi = 2 * Math.PI * ( effectController.azimuth - 0.5 );
+
+					sunSphere.position.x = distance * Math.cos( phi );
+					sunSphere.position.y = distance * Math.sin( phi ) * Math.sin( theta );
+					sunSphere.position.z = distance * Math.sin( phi ) * Math.cos( theta );
+
+					sunSphere.visible = effectController.sun;
+
+					uniforms.sunPosition.value.copy( sunSphere.position );
+
+					renderer.render( scene, camera );
+
+				}
+
+				// var gui = new dat.GUI();
+
+				// gui.add( effectController, "turbidity", 1.0, 20.0, 0.1 ).onChange( guiChanged );
+				// gui.add( effectController, "rayleigh", 0.0, 4, 0.001 ).onChange( guiChanged );
+				// gui.add( effectController, "mieCoefficient", 0.0, 0.1, 0.001 ).onChange( guiChanged );
+				// gui.add( effectController, "mieDirectionalG", 0.0, 1, 0.001 ).onChange( guiChanged );
+				// gui.add( effectController, "luminance", 0.0, 2 ).onChange( guiChanged );
+				// gui.add( effectController, "inclination", -1, 1, 0.0001 ).onChange( guiChanged );
+				// gui.add( effectController, "azimuth", -1, 1, 0.0001 ).onChange( guiChanged );
+				// gui.add( effectController, "sun" ).onChange( guiChanged );
+
+				guiChanged();
+
+			}
+
+			//create cube envmap function
+	        function createCubeMap() {
+	            var path = "http://design-projects.xiehuating.com/demos/cubemaps/parliament/small/";
+	            var format = '.jpg';
+	            var urls = [
+	                path + 'posx' + format, path + 'negx' + format,
+	                path + 'posy' + format, path + 'negy' + format,
+	                path + 'posz' + format, path + 'negz' + format
+	            ];
+
+	            var textureCube = new THREE.CubeTextureLoader().load(urls);
+	            return textureCube;
+	        }
+
+	        //gui change material function
+	  		//  var setTexture = function(texture) {
+			// 	var data = [];
+			// 	if (defaultTextrue.length) {
+			// 		data = defaultTextrue.filter(function(item){
+			// 				return (item.type !== texture.type);
+			// 			});
+			// 			data.push(texture);
+			// 	}
+			// 	postMsgOut(data);
+			// };
+
+			// var postMsgOut = function(message) {
+			// 	message = {from: "threedviewer", data: message};
+	  		//  window.parent.postMessage(message,'*');
+			// };
+
+			//window resize function
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				cameraCube.aspect = window.innerWidth / window.innerHeight;
+				cameraCube.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			//animate
+			function animate(){
+
+				requestAnimationFrame( animate );
+
+				cameraCube.rotation.copy( camera.rotation );
+
+
+				//render scene from camera
+				renderer.render(scene,camera);
+				//render scene from scene cube
+				//renderer.render(sceneCube, cameraCube);
+
+
+				stats.update();
+				controls.update();
+			}
+
+			function buildGui() {
+				//gui control params
+				var gui = new dat.GUI();
+
+				gui.close();
+
+				var params = {
+					keyLightColor: sunLight.color.getHex(),
+					keyLightIntensity: sunLight.intensity,
+
+					fillLight01Color: fillLight01.color.getHex(),
+					fillLight01Intensity: fillLight01.intensity,
+
+					fillLight02Color: fillLight02.color.getHex(),
+					fillLight02Intensity: fillLight02.intensity,
+
+					fillLight03Color: fillLight03.color.getHex(),
+					fillLight03Intensity: fillLight03.intensity,
+
+					// hemiLightColor: hemiLight.color.getHex(),
+					// hemiLightGroundColor: hemiLight.groundColor.getHex(),
+					// hemiLightIntensity: hemiLight.intensity,
+
+					ambientLightColor: ambientLight.color.getHex(),
+					ambientLightIntensity: ambientLight.intensity,
+
+					bgColor: document.body.style.backgroundColor,
+
+				};
+
+				
+				keyLight = gui.addFolder('Key Light');
+		        keyLight.addColor(params, 'keyLightColor').onChange( function ( val ) {
+					sunLight.color.setHex( val );
+				});
+		        keyLight.add(params, 'keyLightIntensity', 0, 1).onChange( function ( val ) {
+					sunLight.intensity = val;
+				} );
+		        keyLight.open();
+
+		        fillLight = gui.addFolder('Fill Light');
+		        fillLight.addColor(params, 'fillLight01Color').onChange( function ( val ) {
+					fillLight01.color.setHex( val );
+				});
+		        fillLight.add(params, 'fillLight01Intensity', 0, 1).onChange( function ( val ) {
+					fillLight01.intensity = val;
+				} );
+
+				fillLight.addColor(params, 'fillLight02Color').onChange( function ( val ) {
+					fillLight02.color.setHex( val );
+				});
+		        fillLight.add(params, 'fillLight02Intensity', 0, 1).onChange( function ( val ) {
+					fillLight02.intensity = val;
+				} );
+
+				fillLight.addColor(params, 'fillLight03Color').onChange( function ( val ) {
+					fillLight03.color.setHex( val );
+				});
+		        fillLight.add(params, 'fillLight03Intensity', 0, 1).onChange( function ( val ) {
+					fillLight03.intensity = val;
+				} );
+
+		        fillLight.open();
+
+		  //       hemiLighting = gui.addFolder('Hemi Light');
+		  //       hemiLighting.addColor(params, 'hemiLightColor').onChange( function ( val ) {
+				// 	hemiLight.color.setHex( val );
+				// });
+				// hemiLighting.addColor(params, 'hemiLightGroundColor').onChange( function ( val ) {
+				// 	hemiLight.groundColor.setHex( val );
+				// });
+		  //       hemiLighting.add(params, 'hemiLightIntensity', 0, 1).onChange( function ( val ) {
+				// 	hemiLight.intensity = val;
+				// } );
+		  //       hemiLighting.open();
+
+		        ambientLighting = gui.addFolder('Ambient Light');
+		        ambientLighting.addColor(params, 'ambientLightColor').onChange( function ( val ) {
+					ambientLight.color.setHex( val );
+				});
+		        ambientLighting.add(params, 'ambientLightIntensity', 0, 1).onChange( function ( val ) {
+					ambientLight.intensity = val;
+				} );
+		        ambientLighting.open();
+
+		        background = gui.addFolder('Background')
+		        background.addColor(params, 'bgColor').onChange( function ( val ) {
+					document.body.style.backgroundColor = val;
+				} );
+				background.open();
+			}
+
+			animate();	
+			//buildGui();
+
+		};
+	
+		window.onload = function(){ init() };
+
+	</script>
+
+
+</body>
+</html>
