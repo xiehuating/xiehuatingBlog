@@ -609,7 +609,7 @@ footer.footer a.link{
 .project-item-paragraph {
 	color: rgba(0, 0, 0, 0.84);
 	font-weight: 400;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.03125rem;
     margin-bottom: 1.0em;
     line-height: 1.7;
     text-align: left;

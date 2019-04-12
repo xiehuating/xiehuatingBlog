@@ -47,7 +47,7 @@
 			//create scene
 			var scene = new THREE.Scene();
 
-			scene.fog = new THREE.FogExp2( 0xa1b9db, 0.0009);
+			scene.fog = new THREE.FogExp2( 0xa1b9db, 0.0012);
 			//cube envmap
 			var sceneCube = new THREE.Scene();
 
@@ -191,21 +191,22 @@
 					textureGroundAlpha.repeat.set( 1, 1 );		
 			}, onProgress, onError);
 
-			var materialCitySkyline = new THREE.MeshStandardMaterial({
-							color: 0xfafafa,
+			var materialCitySkyline = new THREE.MeshBasicMaterial({
+							color: 0xffffff,
 							map: textureCitySkyline,
-							roughness: 0,
-							metalness: 0,
+							//roughness: 0,
+							//metalness: 0,
 							blending: THREE.NormalBlending,
 							shading: THREE.SmoothShading,
 							alphaMap: textureCitySkylineAlpha,
+							//specularMap: textureCitySkyline,
 							transparent: true,
 							opacity: 0.6,
-							//envMap: textureCitySkyEnvMapWhite,
-							//envMapIntensity: 1,
+							//lightMap: textureCitySkyEnvMapWhite,
+							//envMapIntensity: 0.1,
 							//wireframe: true,	
-							emissive: 0xffffff,	
-							emissiveIntensity: 0.3,	
+							//emissive: 0xffffff,	
+							//emissiveIntensity: 0.3,	
 							//side: THREE.DoubleSide,			
 						});
 
