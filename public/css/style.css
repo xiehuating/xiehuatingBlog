@@ -405,7 +405,7 @@ footer.footer a.link{
     text-decoration: none;
     color: rgba(0,0,0,0.84);
     font-size: 1.25rem;
-    /* font-weight: 500; */
+    font-weight: 600; 
 }
 
 .project-item-date, .project-item-category {

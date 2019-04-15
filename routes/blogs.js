@@ -26,18 +26,6 @@ router.get('/', function (req, res, next) {
 //   res.send('文章详情页');
 // });
 
-router.get('/revit-2019-new-material-analysis', function (req, res, next) {
-	res.render('./blogs/revit-2019-new-material-analysis',{
-  	  	// title: req.params.postId
-  	});
-});
-
-router.get('/table-th-nowrap', function (req, res, next) {
-	res.render('./blogs/table-th-nowrap',{
-  	  	// title: req.params.postId
-  	});
-});
-
 // GET /posts/:postId/edit 更新文章页
 // router.get('/:postId/edit', checkLogin, function (req, res, next) {
 //   res.send('更新文章页');
@@ -52,5 +40,24 @@ router.get('/table-th-nowrap', function (req, res, next) {
 // router.get('/:postId/remove', checkLogin, function (req, res, next) {
 //   res.send('删除文章');
 // });
+
+router.get('/revit-2019-new-material-analysis', function (req, res, next) {
+	res.render('./blogs/revit-2019-new-material-analysis',{
+  	  	// title: req.params.postId
+  	});
+});
+
+router.get('/table-th-nowrap', function (req, res, next) {
+	res.render('./blogs/table-th-nowrap',{
+  	  	// title: req.params.postId
+  	});
+});
+
+router.get('/city-skyline-background', function (req, res, next) {
+	res.render('./blogs/city-skyline-background',{
+  	  	// title: req.params.postId
+  	});
+});
+
 
 module.exports = router
