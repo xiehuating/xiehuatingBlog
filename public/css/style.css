@@ -691,6 +691,12 @@ footer.footer a.link{
     margin: 0 1rem 1rem 2rem;
 }
 
+.project-item-ul .project-item-ul {
+    line-height: 2;
+    list-style: circle inside;
+    margin: 0 1rem 0 2rem;
+}
+
 .project-item-ol {
     line-height: 2;
     list-style: upper-roman inside;

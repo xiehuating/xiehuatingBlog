@@ -158,6 +158,11 @@
 
 			var textureCitySkyline = new THREE.Texture();
 			var textureCitySkylineAlpha = new THREE.Texture();
+			var textureMountainSkyline = new THREE.Texture();
+			var textureMountainSkylineAlpha = new THREE.Texture();
+			var textureCountrySkyline = new THREE.Texture();
+			var textureCountrySkylineAlpha = new THREE.Texture();
+
 			var textureCitySkyEnvMapWhite = new THREE.Texture();
 			var textureGroundAlpha = new THREE.Texture();
 
@@ -167,14 +172,42 @@
 					textureCitySkyline.image = image;
 					textureCitySkyline.needsUpdate = true;
 					textureCitySkyline.wrapS = textureCitySkyline.wrapT = THREE.RepeatWrapping;
-					textureCitySkyline.repeat.set( 0.5, 1 );		
+					textureCitySkyline.repeat.set( 0.44, 1 );		
 			}, onProgress, onError);
 
 			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/city-skyline-alpha.jpg', function ( image ) {
 					textureCitySkylineAlpha.image = image;
 					textureCitySkylineAlpha.needsUpdate = true;
 					textureCitySkylineAlpha.wrapS = textureCitySkylineAlpha.wrapT = THREE.RepeatWrapping;
-					textureCitySkylineAlpha.repeat.set( 0.5, 1 );		
+					textureCitySkylineAlpha.repeat.set( 0.44, 1 );		
+			}, onProgress, onError);
+
+			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/mountain-skyline.jpg', function ( image ) {
+				textureMountainSkyline.image = image;
+				textureMountainSkyline.needsUpdate = true;
+				textureMountainSkyline.wrapS = textureMountainSkyline.wrapT = THREE.RepeatWrapping;
+				textureMountainSkyline.repeat.set( 0.27, 1 );		
+			}, onProgress, onError);
+
+			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/mountain-skyline-alpha.jpg', function ( image ) {
+				textureMountainSkylineAlpha.image = image;
+				textureMountainSkylineAlpha.needsUpdate = true;
+				textureMountainSkylineAlpha.wrapS = textureMountainSkylineAlpha.wrapT = THREE.RepeatWrapping;
+				textureMountainSkylineAlpha.repeat.set( 0.27, 1 );		
+			}, onProgress, onError);
+
+			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/mountain-skyline.jpg', function ( image ) {
+				textureCountrySkyline.image = image;
+				textureCountrySkyline.needsUpdate = true;
+				textureCountrySkyline.wrapS = textureCountrySkyline.wrapT = THREE.RepeatWrapping;
+				textureCountrySkyline.repeat.set( 0.27, 1 );		
+			}, onProgress, onError);
+
+			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/mountain-skyline-alpha.jpg', function ( image ) {
+				textureCountrySkylineAlpha.image = image;
+				textureCountrySkylineAlpha.needsUpdate = true;
+				textureCountrySkylineAlpha.wrapS = textureCountrySkylineAlpha.wrapT = THREE.RepeatWrapping;
+				textureCountrySkylineAlpha.repeat.set( 0.27, 1 );		
 			}, onProgress, onError);
 
 			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/envMap-white.jpg', function ( image ) {
@@ -209,6 +242,44 @@
 							//emissiveIntensity: 0.3,	
 							//side: THREE.DoubleSide,			
 						});
+
+			var materialMountainSkyline = new THREE.MeshBasicMaterial({
+				color: 0xffffff,
+				map: textureMountainSkyline,
+				//roughness: 0,
+				//metalness: 0,
+				blending: THREE.NormalBlending,
+				shading: THREE.SmoothShading,
+				alphaMap: textureMountainSkylineAlpha,
+				//specularMap: textureCitySkyline,
+				transparent: true,
+				opacity: 0.5,
+				//lightMap: textureCitySkyEnvMapWhite,
+				//envMapIntensity: 0.1,
+				//wireframe: true,	
+				//emissive: 0xffffff,	
+				//emissiveIntensity: 1,	
+				//side: THREE.DoubleSide,			
+			});
+
+			var materialCountrySkyline = new THREE.MeshBasicMaterial({
+				color: 0xffffff,
+				map: textureCountrySkyline,
+				//roughness: 0,
+				//metalness: 0,
+				blending: THREE.NormalBlending,
+				shading: THREE.SmoothShading,
+				alphaMap: textureCountrySkylineAlpha,
+				//specularMap: textureCitySkyline,
+				transparent: true,
+				opacity: 0.5,
+				//lightMap: textureCitySkyEnvMapWhite,
+				//envMapIntensity: 0.1,
+				//wireframe: true,	
+				//emissive: 0xffffff,	
+				//emissiveIntensity: 1,	
+				//side: THREE.DoubleSide,			
+			});
 
 			var materialGround = new THREE.MeshStandardMaterial({
 							color: 0xfafafa,
@@ -299,7 +370,9 @@
 			    rightSideHouseShopFrontFrame: "rightSideHouseShopFrontFrame",
 			    rightSideHouseShopSecurityDoor: "rightSideHouseShopSecurityDoor",
 
-			    citySkyline: "citySkyline"
+			    citySkyline: "citySkyline",
+				mountainSkyline: "mountainSkyline",
+				countrySkyline: "countrySkyline"
 			};  
 
 			var mainBuilding = new THREE.Object3D();
@@ -367,6 +440,46 @@
 			}
 
 			loadSkyline("skyline001.obj", territory, models.citySkyline, materialCitySkyline);
+			//load city skyline obj model function
+			function loadSkyline(path, groupName, name, material) {
+				loader.load('http://design-projects.xiehuating.com/demos/city-skyline/models/' + path, function( object ) {
+						object.traverse( function ( child ){
+							if ( child instanceof THREE.Mesh ) {
+								var uvs = child.geometry.attributes.uv.array;
+								child.geometry.addAttribute( 'uv2', new THREE.BufferAttribute( uvs, 2 ) );
+								child.material = material;
+								child.receiveShadow = true;
+								child.castShadow = true;
+							}
+						});
+					groupName[name] = object;
+					groupName[name].position.y = 0;
+					groupName.add( groupName[name] );
+
+				}, onProgress, onError);
+			}
+
+			loadSkyline("skyline002.obj", territory, models.mountainSkyline, materialMountainSkyline);
+			//load city skyline obj model function
+			function loadSkyline(path, groupName, name, material) {
+				loader.load('http://design-projects.xiehuating.com/demos/city-skyline/models/' + path, function( object ) {
+						object.traverse( function ( child ){
+							if ( child instanceof THREE.Mesh ) {
+								var uvs = child.geometry.attributes.uv.array;
+								child.geometry.addAttribute( 'uv2', new THREE.BufferAttribute( uvs, 2 ) );
+								child.material = material;
+								child.receiveShadow = true;
+								child.castShadow = true;
+							}
+						});
+					groupName[name] = object;
+					groupName[name].position.y = 0;
+					groupName.add( groupName[name] );
+
+				}, onProgress, onError);
+			}
+
+			loadSkyline("skyline003.obj", territory, models.countrySkyline, materialCountrySkyline);
 			//load city skyline obj model function
 			function loadSkyline(path, groupName, name, material) {
 				loader.load('http://design-projects.xiehuating.com/demos/city-skyline/models/' + path, function( object ) {
@@ -464,7 +577,7 @@
 			document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
 			//output stats to html element
-			//document.getElementById("WebGL-output").appendChild(stats.dom);
+			document.getElementById("WebGL-output").appendChild(stats.dom);
 
 			//add window resize event
 			window.addEventListener( 'resize', onWindowResize, false);
