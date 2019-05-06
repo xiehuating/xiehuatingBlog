@@ -5,293 +5,302 @@
 
 		
 
-		<main role="main" class="container">
-			<div class="row">
-				<div class="offset-lg-1 col-lg-10 project-item project-article" id="">
-					<!-- header figure -->
-					<div id="project-detail-caption" class="project-detail-h1">
-						<h1>为WebGL场景添加城市天际线</h1>
-						<div class="article-description">
-							<span class="article-writer" title="Article Writer">
-								<span class="article-description-icon"></span>
-								<p>Xie Huating</p>
-							</span>
-							<span class="article-date" title="Publish Date">
-								<span class="article-description-icon"></span>
-								<p><time>2019.03.21</time></p>
-							</span>
-							<span class="article-tag" title="Article Tag">
-								<span class="article-description-icon"></span>
-								<p class="">UX</p>
-								<p class="">UI</p>
-							</span>
-						</div>
-					</div>
-					<figure class="text-center project-item-banner">
-						<img src="http://design-projects.xiehuating.com/blogs/table-th-nowrap/table-th-nowrap-banner-image.jpg" class="img-fluid" alt="Responsive image">
-					</figure>
-					<p class="project-item-paragraph">
-						在很多三维建筑展示引擎中，用户可以设置展示建筑所处的环境。在场景远处的边缘添加上城市天际线的环形贴图来模拟，这应该算是锦上添花的效果优化，通过远处的城市天际线用户可以感受到建筑所处的环境，是城市、乡村、海滨、或沙漠，丰富了原本仅有天空渐变色的背景，增加了场景的代入感。
-					</p>
-					<p class="project-item-paragraph">
-						为了实现本教程中的DEMO效果，会涉及到一些常用工具，比如：ThreeJS、Photoshop、三维软件。你不需要掌握的很好，但都要懂一些。如果你是一名设计师，想要搭建出这个demo的话必须要掌握一定的ThreeJS知识；如果你是一名前端开发，需要学习一点点Photoshop和三维软件的知识。
-					</p>
-
-					<h2>竞品&参考照片</h2>
-					<h3>Twinmotion</h3>
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-city.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-city.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							City | Twinmotion
-						</p>
-					</figure>
-
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-bay.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-bay.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							Bay | Twinmotion
-						</p>
-					</figure>
-
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-countrySide.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-countrySide.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							Countryside | Twinmotion
-						</p>
-					</figure>
-
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-mountains.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-mountains.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							Mountains | Twinmotion
-						</p>
-					</figure>
-					<p class="project-item-paragraph">
-						Twinmotion的效果非常棒~在Twinmotion2019中提供了很多天际线场景的方案，共有9种：None，City，Town，Countryside，Mountains，City island，Bay，Waterfront，European City。
-					</p>
-					<p class="project-item-paragraph">
-						城市天际线隐隐约约在远处显现，低对比度、高灰度、略带模糊，视觉上很好的融合在背景中。用户可以感知到，但绝对不会跳到前景中，抢了建筑模型的戏份。
-					</p>
-
-
-					<h3>Mars</h3>
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/mars-city01.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/mars-city01.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							Demo | Mars
-						</p>
-					</figure>
-
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/mars-city02.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/mars-city02.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							Demo | Mars
-						</p>
-					</figure>
-
-					<p class="project-item-paragraph">
-						光辉城市中使用了DEMO场景做测试。在DEMO场景中，天际线贴图视觉上离场景中心很近，并且在中景处添加了很多三维树木。在天际线贴图和三维场景的衔接处比较生硬。
-					</p>
-
-					<h3>参考照片</h3>
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city01.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city01.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							City Skyline | Reference
-						</p>
-					</figure>
-
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city02.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city02.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							City Skyline | Reference
-						</p>
-					</figure>
-
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city03.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city03.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							City Skyline | Reference
-						</p>
-					</figure>
-
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-countrySide01.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-countrySide01.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							Countryside Skyline | Reference
-						</p>
-					</figure>
-
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-mountain01.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-mountain01.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							Mountains Skyline | Reference
-						</p>
-					</figure>
-
-					<figure class="text-center project-item-image">
-						<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-mountain02.jpg" title="">
-							<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-mountain02.jpg" class="img-fluid pimg" alt="Responsive image">
-						</a>
-						<p class="project-item-image-caption">
-							Mountains Skyline | Reference
-						</p>
-					</figure>
-
-					<p class="project-item-paragraph">
-						真实世界永远是最好的老师，通过观察这些照片我们能总结出天际线贴图的一些特点。
-					</p>
-					<ul class="list-unstyled project-item-ul">
-						<li>天际线的视觉距离非常的远，是在离观察地点很远很远处。</li>
-						<li>因为摄影师是在拍摄很远很远处的景物，所以透视效果更趋近与正交投影，基本不会有两点透视、三点透视的视觉效果。</li>
-						<li>远处城市天际线或山脉天际线都会被大气雾效果影响。造成以下结果：
-							<ul class="list-unstyled project-item-ul">
-								<li>某些情况下出现比较极端情况：仅能看到城市天际线的剪影效果，建筑细节完全不可见。</li>
-								<li>对颜色产生影响，表现出的特点为：灰度高，饱和度低，对比度低，颜色很大程度受天光影响。</li>
-								<li>天际线轮廓边缘与天空背景的衔接自然，很好融入天空背景。</li>
-							</ul>
-						</li>
-						<li>还有另外一点，参考摄影的经验，当镜头焦距对准前景时，背景是应该有一些失焦模糊的。所以天际线图像本身的锐度不能高，需要有一定的模糊效果。</li>
-					</ul>	
-
-					<h2>制作</h2>
-					<h3>需求</h3>
-					<p class="project-item-paragraph">
-						模仿真实世界能够创造出和谐的视觉效果。在此基础上我觉还有几点是需要考虑的。
-					</p>
-					<ol class="list-unstyled project-item-ol">
-						<li>场景主体的剪影面积和城市天际线背景的剪影面积的比例要合适。在面积占比上前景的建筑一定是画面的重点，所以背景的剪影面积最好不要过大。</li>
-						<li>建筑场景的光照方向和城市天际线背景的光照方向要匹配。</li>
-						<li>建筑场景的光照颜色和城市天际线背景的颜色要匹配。比如建筑光照表现的是清晨或傍晚的光照效果，将场景渲染成了橙黄色，那么城市天际线背景的色调也应该是橙黄色调的。</li>
-						<li>城市天际线距离场景中心的距离可以通过调试设置到合适的位置。距离我在做demo的时候设想城市天际线处于离场景中心5千米元的位置，但threejs摄像机远截面并不支持这么远的距离，你可能需要通过调试确定一个合理的距离。</li>
-						<li>从产品或实现方面的其他考虑。</li>
-					</ol>
-					<h3>流程</h3>
-					<p class="project-item-paragraph">制作的基本流程如下：</p>
-					<ol class="list-unstyled project-item-ol">
-						<li>使用ThreeJS创建场景，并加入<code>camera</code>、<code>light</code>、<code>renderer</code>等</li>
-						<li>加载预先准备好的建筑模型。DEMO中使用.obj格式的模型，并使用了一个白模材质。</li>
-						<li>建筑场景搭建完毕后开始准备城市天际线背景的素材。</li>
-							<ol class="list-unstyled project-item-ol">
-								<li>
-									城市天际线背景将被贴在一个圆柱体上。
-									在三维软件中删除圆柱体的上下盖面，并且将多边形面片的法向量翻转朝向圆柱体内部，将圆柱体底面圆心放置到场景中心点位置。
-								</li>
-								<li>
-									使用网上搜索到的城市天际线素材制作贴图。
-									我使用两张贴图，色彩贴图贴在<code>.map</code>通道，透明度贴图贴在<code>.alphaMap</code>。
-									我们需要调整色彩贴图的色调。参考素材，在Photoshop使用色阶、曲线、亮度/对比度等工具将饱和度调低、灰度调高、对比度调低、增加一定的模糊。
-									透明度贴图将遮罩住色彩贴图非城市建筑的部分，应用材质后将只会显示城市天际线中的建筑物。
-									在这个简单demo中我只使用两张贴图，如果你有更多控制的需求，你可以添加更多贴图实现更加精确的控制，比如粗糙度贴图、金属度贴图、法线贴图、AO贴图等等。
-									不过这些贴图的制作会大大增加你的工作量；另外基于我个人观察，由于城市天际线处于较远处，所以对视觉效果产生的影响也非常有限。
-								</li>
-							</ol>
-						<li>将城市天际线的圆柱体模型加载进ThreeJS场景，创建材质并将刚刚准备好的贴图应用到材质的<code>.map</code>通道和<code>.alphaMap</code>通道。</li>
-						<li>调试场景，如平行光、环境光、雾效、天空球效果等</li>
-					</ol>
-
-					<p class="project-item-paragraph">完成DEMO如下：</p>
-					
-					<h3>DEMO截图</h3>
-
-					<h3>DEMO链接</h3>
-					<p><a class="" href="/demos/city-skyline" target="_blank" title="">http://www.xiehuating.com/demos/city-skyline</a></p>
-
-					<h2>小结</h2>
-
-					<p class="project-item-paragraph">
-						天际线贴图需要匹配这种环境氛围。
-					</p>
-					<h3>优势</h3>
-					<p class="project-item-paragraph">
-						
-					</p>
-					<ul class="list-unstyled project-item-ul">
-						<li>参数可以灵活控制。</li>
-						<li>有一定真实感，并且能够很和谐的与前景主体建筑共存。</li>
-						<li>
-							对比使用<a class="" href="https://en.wikipedia.org/wiki/Cube_mapping" target="_blank" title="">Cube map</a>、<a class="" href="https://en.wikipedia.org/wiki/Equirectangular_projection" target="_blank" title="">Equirectangular</a>全景贴图实现的背景，此实现方式不会产生明显的透视错误。
-							Cube map贴图无法实现与前景建筑匹配正确的透视比例，常见效果如下图：
-						</li>
-					</ul>
-					
-					<h3>其他优化</h3>
-					<p class="project-item-paragraph">
-						这个DEMO中仅仅实现了城市天际线背景白天的展示效果，还有更多的细节可以完善：	
-					</p>
-					<ul class="list-unstyled project-item-ul">
-						<li>当场景日光、天空环境光颜色变化时，天际线贴图也需要随之变化。比如造成和傍晚的日光是偏橙红色的，天光是深蓝色的。</li>
-						<li>城市天际线背景夜晚的效果。当夜晚时，月光会很微弱，城市建筑中的灯光会亮起。</li>
-						<li>优化贴图:</li>
-							<ul class="list-unstyled project-item-ul">
-								<li>使用高质量素材，提高贴图制作水平。</li>
-								<li>视觉上降低贴图水平方向的重复度。DEMO中的城市天际线水平铺贴的重复效果很明显</li>
-							</ul>
-						<li>城市天际线背景图片更换。</li>
-						<li>城市天际线倒影效果等。</li>
-						<li>使用更多的贴图控制效果。</li>
-					</ul>	
-
-					<p class="project-item-paragraph">
-						以此为基础，你可以在实际项目中完善这一切。Enjoy~
-					</p>	
-					
-
-					<h2>参考资料</h2>
-					<h3>竞品</h3>
-					<dl class="row list-unstyled project-item-dl">
-						<dt class="col-sm-3">
-							Twinmotion
-						</dt>
-						<dd class="col-sm-9"><a href="https://twinmotion.abvent.com/en/">https://twinmotion.abvent.com/en/</a></dd>
-						<dt class="col-sm-3">
-							Mars
-						</dt>
-						<dd class="col-sm-9"><a href="http://www.sheencity.com/mars">http://www.sheencity.com/mars</a></dd>
-					</dl>
-					<h3>素材图片</h3>
-					<dl class="row list-unstyled project-item-dl">
-						<dt class="col-sm-3">
-							Google 
-						</dt>
-						<dd class="col-sm-9"><a href="https://www.google.com/search?q=skyline">https://www.google.com/search?q=skyline</a></dd>
-					</dl>
-					<h3>ThreeJS</h3>
-					<dl class="row list-unstyled project-item-dl">
-						<dt class="col-sm-3">
-							Sky Shader
-						</dt>
-						<dd class="col-sm-9"><a href="https://threejs.org/examples/#webgl_shaders_sky">https://threejs.org/examples/#webgl_shaders_sky</a></dd>
-					</dl>
-
-					<div class="original-article-btn">
-							<a class="btn btn-dark" role="button" aria-pressed="true" href="/demos/city-skyline" target="_blank">DEMO链接</a>
-					</div>
-
+<main role="main" class="container">
+	<div class="row">
+		<div class="offset-lg-1 col-lg-10 project-item project-article" id="">
+			<!-- header figure -->
+			<div id="project-detail-caption" class="project-detail-h1">
+				<h1>为WebGL场景添加城市天际线</h1>
+				<div class="article-description">
+					<span class="article-writer" title="Article Writer">
+						<span class="article-description-icon"></span>
+						<p>Xie Huating</p>
+					</span>
+					<span class="article-date" title="Publish Date">
+						<span class="article-description-icon"></span>
+						<p><time>2019.03.21</time></p>
+					</span>
+					<span class="article-tag" title="Article Tag">
+						<span class="article-description-icon"></span>
+						<p class="">UX</p>
+						<p class="">UI</p>
+					</span>
 				</div>
 			</div>
-		</main>
+			<figure class="text-center project-item-banner">
+				<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/demo-screenshot-banner.jpg" class="img-fluid" alt="Responsive image">
+			</figure>
+			<p class="project-item-paragraph">
+				在一些三维建筑展示引擎中，用户可以设置展示建筑所处的环境。在场景远处的边缘添加上城市天际线的环形贴图来模拟，这应该算是锦上添花的效果优化，通过远处的城市天际线用户可以感受到建筑所处的环境，是城市、乡村、海滨、或沙漠，丰富了原本仅有天空渐变色的背景，增加了场景的代入感。
+			</p>
+			<p class="project-item-paragraph">
+				为了实现本教程中的DEMO效果，会涉及到一些常用工具，比如：ThreeJS、Photoshop、三维软件。你不需要掌握的很好，但都要懂一些。如果你是一名设计师，想要搭建出这个demo的话必须要掌握一定的ThreeJS知识；如果你是一名前端开发，需要学习一点点Photoshop和三维软件的知识。
+			</p>
+
+			<h2>竞品&参考照片</h2>
+			<h3>Twinmotion</h3>
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-city.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-city.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					City | Twinmotion
+				</p>
+			</figure>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-bay.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-bay.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					Bay | Twinmotion
+				</p>
+			</figure>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-countrySide.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-countrySide.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					Countryside | Twinmotion
+				</p>
+			</figure>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-mountains.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/twinmotion-mountains.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					Mountains | Twinmotion
+				</p>
+			</figure>
+			<p class="project-item-paragraph">
+				Twinmotion的效果非常棒~在Twinmotion2019中提供了很多天际线场景的方案，共有9种：None，City，Town，Countryside，Mountains，City island，Bay，Waterfront，European City。
+			</p>
+			<p class="project-item-paragraph">
+				城市天际线隐隐约约在远处显现，低对比度、高灰度、略带模糊，视觉上很好的融合在背景中。用户可以感知到，但绝对不会跳到前景中抢了建筑模型的戏份。
+			</p>
+
+
+			<h3>Mars</h3>
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/mars-city01.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/mars-city01.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					Demo | Mars
+				</p>
+			</figure>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/mars-city02.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/mars-city02.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					Demo | Mars
+				</p>
+			</figure>
+
+			<p class="project-item-paragraph">
+				光辉城市中使用了默认的DEMO场景做测试。在DEMO场景中，天际线贴图视觉上离场景中心很近，并且在中景处添加了很多三维树木。在天际线贴图和三维场景的衔接处比较生硬。
+			</p>
+
+			<h3>参考照片</h3>
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city01.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city01.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					City Skyline | Reference
+				</p>
+			</figure>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city02.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city02.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					City Skyline | Reference
+				</p>
+			</figure>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city03.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-city03.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					City Skyline | Reference
+				</p>
+			</figure>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-countrySide01.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-countrySide01.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					Countryside Skyline | Reference
+				</p>
+			</figure>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-mountain01.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-mountain01.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					Mountains Skyline | Reference
+				</p>
+			</figure>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-mountain02.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/reference-mountain02.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					Mountains Skyline | Reference
+				</p>
+			</figure>
+
+			<p class="project-item-paragraph">
+				真实世界永远是最好的老师，通过观察这些照片我们能总结出天际线贴图的一些特点。
+			</p>
+			<ul class="list-unstyled project-item-ul">
+				<li>天际线的视觉距离非常的远，在离相机视点很远很远处。</li>
+				<li>因为摄影师是在拍摄很远很远处的景物，所以透视效果更趋近与正交投影，基本不会有两点透视、三点透视的视觉效果。</li>
+				<li>远处城市天际线或山脉天际线都会被大气雾效果影响。造成以下结果：
+					<ul class="list-unstyled project-item-ul">
+						<li>某些情况下出现比较极端情况：仅能看到城市天际线的剪影效果，建筑细节完全不可见。</li>
+						<li>对颜色产生影响，表现出的特点为：灰度高，饱和度低，对比度低，颜色很大程度受日光、天光影响。</li>
+						<li>天际线轮廓边缘与天空背景的衔接自然，很好融入天空背景。</li>
+					</ul>
+				</li>
+				<li>还有另外一点，参考摄影的经验，当镜头焦距对准前景时，背景是应该有一些失焦模糊的。所以天际线图像本身的锐度不能过高，甚至需要有一定的模糊效果。</li>
+			</ul>	
+
+			<h2>DEMO制作</h2>
+			<h3>需求</h3>
+			<p class="project-item-paragraph">
+				模仿真实世界能够创造出和谐的视觉效果，在此基础上我觉还有几点是需要考虑的：
+			</p>
+			<ol class="list-unstyled project-item-ol">
+				<li>场景主体剪影面积和城市天际线背景剪影面积的比例要合适。在面积占比上前景的建筑一定是画面的重点，所以背景的剪影面积最好不要过大。</li>
+				<li>建筑场景的光照方向和城市天际线背景的光照方向最好要匹配。在DEMO示例中测试发现，由于城市天际线离的比较远，剪影面积比较小，所以不太容易关注到光照的一致性。</li>
+				<li>建筑场景的光照颜色和城市天际线背景的颜色要匹配。比如建筑光照表现的是清晨或傍晚的光照效果，将场景渲染成了橙黄色，那么城市天际线背景的色调也应该是橙黄色调的。</li>
+				<li>城市天际线距离场景中心的距离可以通过调试设置到合适的位置。我在制作示例DEMO的时候设想城市天际线处于离场景中心5千米远的位置，但threejs摄像机远截面并不支持这么远的距离，你可能需要通过调试确定一个视觉上合理的距离。</li>
+				<li>其他方面的考虑。如是否使用风格化的城市天际线贴图？二维卡通渲染的城市天际线建筑？剪影效果的？或是白模渲染等。</li>
+			</ol>
+			<h3>流程</h3>
+			<p class="project-item-paragraph">制作的基本流程如下：</p>
+			<ol class="list-unstyled project-item-ol">
+				<li>使用ThreeJS创建场景，并加入<code>camera</code>、<code>light</code>、<code>renderer</code>等场景对象。</li>
+				<li>加载预先准备好的建筑模型。DEMO中使用.obj格式的模型，并使用了一个白模材质。</li>
+				<li>建筑场景搭建完毕后开始准备城市天际线背景的素材。</li>
+					<ol class="list-unstyled project-item-ol">
+						<li>
+							城市天际线背景将被贴在一个圆柱体上。
+							在三维软件中创建圆柱体（注意和建筑模型的尺寸相匹配），删除圆柱体的上下盖面，并且将多边形面片的法向量翻转朝向圆柱体内部，将圆柱体底面圆心放置到场景中心点位置。
+						</li>
+						<li>
+							使用网上搜索到的城市天际线素材制作贴图。
+							我在示例DEMO使用了两张贴图，色彩贴图贴在<code>.map</code>通道，透明度贴图贴在<code>.alphaMap</code>。
+							原始图片素材的色调饱和度不能满足我们的需求，所以需要调整参考图片。在Photoshop中使用色阶、曲线、亮度/对比度等工具将饱和度调低、对比度调低、增加一定的模糊。
+							透明度贴图将遮罩住色彩贴图非城市建筑的部分，应用到材质上，材质将只会显示城市天际线中的建筑物。
+							在这个简单demo中我只使用两张贴图，如果你有更多控制的需求，你可以其他材质属性通道添加贴图控制更多的材质属性，比如粗糙度贴图、金属度贴图、法线贴图、AO贴图等等。
+							不过这些贴图的制作会大大增加你的工作量；另外基于我个人观察，由于城市天际线处于较远处，所以这些通道的贴图对视觉效果产生的影响也非常有限。
+						</li>
+					</ol>
+				<li>将城市天际线的圆柱体模型加载进ThreeJS场景，创建<code>.MeshBasicMaterial</code>材质并将刚刚准备好的贴图应用到材质的<code>.map</code>通道和<code>.alphaMap</code>通道上，并设置其他材质属性值。如果模型加载进场景后，在场景中找不到，你可以看一下<code>camera</code>的远截面距离是否设置的够远，或者从三维软件中导出的时候将模型放大1000倍或者缩小1000倍。</li>
+				<li>调试场景，如平行光、环境光、雾效、天空球效果等。</li>
+			</ol>
+
+			<p class="project-item-paragraph">完成DEMO如下：</p>
+			
+			<h3>DEMO截图</h3>
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/demo-screenshot.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/demo-screenshot.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					DEMO screenshot
+				</p>
+			</figure>
+			<h3>DEMO链接</h3>
+			<p><a class="" href="/demos/city-skyline" target="_blank" title="">http://www.xiehuating.com/demos/city-skyline</a></p>
+
+			<h2>小结</h2>
+			<h3>优势</h3>
+			<ul class="list-unstyled project-item-ul">
+				<li>参数可以灵活控制。</li>
+				<li>有一定真实感，并且能够很和谐的与前景主体建筑共存。</li>
+				<li>
+					对比使用<a class="" href="https://en.wikipedia.org/wiki/Cube_mapping" target="_blank" title="">Cube map</a>、<a class="" href="https://en.wikipedia.org/wiki/Equirectangular_projection" target="_blank" title="">Equirectangular</a>全景贴图实现的背景，此实现方式不会产生明显的透视错误。
+					Cube map贴图无法实现与前景建筑匹配正确的透视比例，给人一种非常别扭的感觉，效果如下图：
+				</li>
+			</ul>
+
+			<figure class="text-center project-item-image">
+				<a class="image-popup-fit-width" href="http://design-projects.xiehuating.com/blogs/city-skyline-background/bad-example-screenshot.jpg" title="">
+					<img src="http://design-projects.xiehuating.com/blogs/city-skyline-background/bad-example-screenshot.jpg" class="img-fluid pimg" alt="Responsive image">
+				</a>
+				<p class="project-item-image-caption">
+					当镜头拉远时，主体建筑缩小，但是背景贴图并没有按透视变化，给人感觉非常奇怪。
+				</p>
+			</figure>
+			
+			<h3>其他优化</h3>
+			<p class="project-item-paragraph">
+				这个DEMO中仅仅实现了城市天际线背景白天的展示效果，还有更多的细节可以完善：	
+			</p>
+			<ul class="list-unstyled project-item-ul">
+				<li>当场景日光、天空环境光颜色变化时，天际线贴图也需要随之变化。比如造成和傍晚的日光是偏橙红色的，天光是深蓝色的。</li>
+				<li>城市天际线背景夜晚的效果。当夜晚时，月光会很微弱，城市建筑中的灯光会亮起。</li>
+				<li>优化贴图:</li>
+					<ul class="list-unstyled project-item-ul">
+						<li>使用高质量素材，提高贴图制作水平。</li>
+						<li>视觉上降低贴图水平方向的重复度。DEMO中的城市天际线水平铺贴的重复效果很明显</li>
+					</ul>
+				<li>用户可以选择不同的城市天际线贴图。</li>
+				<li>城市天际线地面倒影效果。</li>
+				<li>使用更多的贴图控制效果。</li>
+			</ul>	
+
+			<p class="project-item-paragraph">
+				以此为基础，你可以在实际项目中完善这一切。Enjoy~
+			</p>	
+			
+
+			<h2>参考资料</h2>
+			<h3>竞品</h3>
+			<dl class="row list-unstyled project-item-dl">
+				<dt class="col-sm-3">
+					Twinmotion
+				</dt>
+				<dd class="col-sm-9"><a href="https://twinmotion.abvent.com/en/">https://twinmotion.abvent.com/en/</a></dd>
+				<dt class="col-sm-3">
+					Mars
+				</dt>
+				<dd class="col-sm-9"><a href="http://www.sheencity.com/mars">http://www.sheencity.com/mars</a></dd>
+			</dl>
+			<h3>素材图片</h3>
+			<dl class="row list-unstyled project-item-dl">
+				<dt class="col-sm-3">
+					Google 
+				</dt>
+				<dd class="col-sm-9"><a href="https://www.google.com/search?q=skyline">https://www.google.com/search?q=skyline</a></dd>
+			</dl>
+			<h3>ThreeJS</h3>
+			<dl class="row list-unstyled project-item-dl">
+				<dt class="col-sm-3">
+					Sky Shader
+				</dt>
+				<dd class="col-sm-9"><a href="https://threejs.org/examples/#webgl_shaders_sky">https://threejs.org/examples/#webgl_shaders_sky</a></dd>
+			</dl>
+
+			<div class="original-article-btn">
+					<a class="btn btn-dark" role="button" aria-pressed="true" href="/demos/city-skyline" target="_blank">DEMO链接</a>
+			</div>
+
+		</div>
+	</div>
+</main>
  
 <%- include("../footer") %>

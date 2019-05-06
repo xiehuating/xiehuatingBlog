@@ -47,7 +47,7 @@
 			//create scene
 			var scene = new THREE.Scene();
 
-			scene.fog = new THREE.FogExp2( 0xa1b9db, 0.0012);
+			scene.fog = new THREE.FogExp2( 0xb9d6ff, 0.0000);
 			//cube envmap
 			var sceneCube = new THREE.Scene();
 
@@ -196,18 +196,18 @@
 				textureMountainSkylineAlpha.repeat.set( 0.27, 1 );		
 			}, onProgress, onError);
 
-			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/mountain-skyline.jpg', function ( image ) {
+			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/countryside-skyline.jpg', function ( image ) {
 				textureCountrySkyline.image = image;
 				textureCountrySkyline.needsUpdate = true;
 				textureCountrySkyline.wrapS = textureCountrySkyline.wrapT = THREE.RepeatWrapping;
-				textureCountrySkyline.repeat.set( 0.27, 1 );		
+				textureCountrySkyline.repeat.set( 0.3, 0.6 );		
 			}, onProgress, onError);
 
-			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/mountain-skyline-alpha.jpg', function ( image ) {
+			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/countryside-skyline-alpha.jpg', function ( image ) {
 				textureCountrySkylineAlpha.image = image;
 				textureCountrySkylineAlpha.needsUpdate = true;
 				textureCountrySkylineAlpha.wrapS = textureCountrySkylineAlpha.wrapT = THREE.RepeatWrapping;
-				textureCountrySkylineAlpha.repeat.set( 0.27, 1 );		
+				textureCountrySkylineAlpha.repeat.set( 0.3, 0.6 );		
 			}, onProgress, onError);
 
 			loader.load( 'http://design-projects.xiehuating.com/demos/city-skyline/textures/envMap-white.jpg', function ( image ) {
